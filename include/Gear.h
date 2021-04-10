@@ -2,10 +2,54 @@
 #define GEAR_H
 
 #include <iostream>
+#include <string.h>
 
 using namespace std;
 
-void to_svg();
+struct Gear{
+    
+    double radius = 0.0;
 
+    uint8_t teeth = 0;
+};
+
+/**
+* Initialize gear struct
+*
+* @param radius radius of gear
+* @param teeth numbers of teeths
+* return initialized Gear
+*/
+
+Gear* g_init(double radius, uint8_t teeth);
+
+
+/**
+* Converts Gear string to readable string
+* 
+* @param gear to be converted
+* return string representation of gear
+*/
+string g_to_string(Gear* gear);
+
+
+/**
+* Sets radius of given gear
+*
+* @param gear to be modified
+* @param radius to be setted
+* return errcode
+*/
+int g_set_radius(Gear* gear, double radius);
+
+
+/**
+* Sets teeth of given gear
+*
+* @param gear to be modified
+* @param teeth to be setted
+* return errcode
+*/
+int g_set_teeth(Gear* gear, uint8_t teeth);
 
 #endif
