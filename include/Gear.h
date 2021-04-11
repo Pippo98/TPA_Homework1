@@ -10,7 +10,7 @@ struct Gear{
     
     double radius = 0.0;
 
-    uint8_t teeth = 0;
+    int teeth = 0;
 };
 
 /**
@@ -21,7 +21,7 @@ struct Gear{
 * return initialized Gear
 */
 
-Gear* g_init(double radius, uint8_t teeth);
+Gear* g_init(double radius, int teeth);
 
 
 /**
@@ -50,7 +50,7 @@ int g_set_radius(Gear* gear, double radius);
 * @param teeth to be setted
 * return errcode
 */
-int g_set_teeth(Gear* gear, uint8_t teeth);
+int g_set_teeth(Gear* gear, int teeth);
 
 
 /**
@@ -76,7 +76,7 @@ double g_get_radius(Gear* gear);
 *
 * return teeth
 */
-uint8_t  g_get_teeth(Gear* gear);
+int g_get_teeth(Gear* gear);
 
 
 /*
