@@ -29,6 +29,11 @@ string g_to_string(Gear* gear){
     return ret;
 }
 
+int g_check_integrity(Gear* gear){
+    
+    return 0;
+}
+
 int g_set_external_gear(Gear* gear, bool external, double axle_radius){
     gear->external_gear = external;
     gear->axle_radius = axle_radius;
@@ -79,4 +84,20 @@ int g_get_teeth(Gear* gear){
 
 double g_get_modulo(Gear* gear){
     return (gear->reference_radius*2) / gear->teeth;
+}
+
+double g_get_addendum(Gear* gear){
+    return 1 * g_get_modulo(gear);
+}
+
+double g_get_dedendum(Gear* gear){
+    return 1.25 * g_get_modulo(gear);
+}
+
+double g_get_tooth_height(Gear* gear){
+    return 2.25 * g_get_modulo(gear);
+}
+
+double g_get_tooth_thickness(Gear* gear){
+    return (G_PI * g_get_modulo(gear)) / 2;
 }

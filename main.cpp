@@ -31,5 +31,10 @@ int main(){
     cout << g_get_teeth(gear) << endl;
     cout << g_get_modulo(gear) << endl;
 
+    cout << "Addeddum: " << g_get_addendum(gear) << endl;
+    cout << "Dedendum: " << g_get_dedendum(gear) << endl;
+    cout << "Tooth height: " << g_get_tooth_height(gear) << endl;
+    cout << "Tooth thickness: " << g_get_tooth_thickness(gear) << endl;
+
     return 0;
 }

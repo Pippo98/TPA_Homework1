@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string.h>
 
+#define G_PI 3.14159265359
+
 using namespace std;
 
 struct Gear{
@@ -37,6 +39,13 @@ Gear* g_init(bool external_gear, double reference_radius, double axle_radius, in
 */
 string g_to_string(Gear* gear);
 
+/**
+* Checks if the current is valid, so all contrant etc..
+*
+* @param gear to be checked
+* return errcode
+*/
+int g_check_integrity(Gear* gear);
 
 /**
 * Sets external gear flag
@@ -129,5 +138,35 @@ int g_get_teeth(Gear* gear);
 * return modulo
 */
 double g_get_modulo(Gear* gear);
+
+/**
+* Returns addendum, is the distance from reference radius
+* to the tip of the tooth.
+*
+* return addendum 
+*/
+double g_get_addendum(Gear* gear);
+
+/**
+* Returns dedendum, is the distance from reference radius
+* to the bottom of the tooth.
+*
+* return dedendum
+*/
+double g_get_dedendum(Gear* gear);
+
+/**
+* Returns the height of the tooth
+* 
+* return height
+*/
+double g_get_tooth_height(Gear* gear);
+
+/**
+* Returns the thickness of one tooth of the gear
+*
+* return thickness
+*/
+double g_get_tooth_thickness(Gear* gear);
 
 #endif
