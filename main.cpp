@@ -5,7 +5,12 @@
 using namespace std;
 
 int main(){
-    Gear* gear = g_init(true, 20, 2, 5);
+    Gear* gear = g_init(false, 20, 2, 5);
+
+    if(gear == NULL){
+        cout << "Gear not valid" << endl;
+        return -1;
+    }
     
     cout << g_to_string(gear) << endl;
 
@@ -21,7 +26,7 @@ int main(){
     
     // When setting eternal gear to false (so tooths are internal)
     // axle radius must be greater than reference radius!
-    g_set_external_gear(gear, false, 22);
+    g_set_external_gear(gear, false, 1);
 
     cout << g_to_string(gear) << endl;
 

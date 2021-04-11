@@ -8,7 +8,10 @@ Gear* g_init(bool external_gear, double reference_radius, double axle_radius, in
     newGear->reference_radius = reference_radius;
     newGear->axle_radius = axle_radius;
 
-    newGear->teeth  = teeth;
+    newGear->teeth = teeth;
+
+    if(g_check_integrity(newGear) != 0)
+        return NULL;
 
     return newGear;
 }
@@ -30,38 +33,94 @@ string g_to_string(Gear* gear){
 }
 
 int g_check_integrity(Gear* gear){
+
+    if(gear->reference_radius <= 0)
+        return -1;
+
+    if(gear->axle_radius < 0)
+        return -1;
+
+    if(gear->teeth <= 0)
+        return -1;
+
     
+    double modulo = g_get_modulo(gear);
+    double addendum = g_get_addendum(gear);
+    double dedendum = g_get_dedendum(gear);
+
+    if(gear->external_gear){
+        if(gear->axle_radius >= gear->reference_radius - dedendum){
+            return -1;
+        }
+    }
+    else{
+        if(gear->axle_radius <= gear->reference_radius - dedendum){
+            return -1;
+        }
+    }
+
     return 0;
 }
 
 int g_set_external_gear(Gear* gear, bool external, double axle_radius){
+    Gear old_gear = *gear;
+
     gear->external_gear = external;
     gear->axle_radius = axle_radius;
 
-    return 0;
+    int errcode = g_check_integrity(gear);
+    if(errcode != 0)
+        *gear = old_gear;
+
+    return errcode;
 }
 
 int g_set_reference_radius(Gear* gear, double radius){
+    Gear old_gear = *gear;
+
     gear->reference_radius = radius;
+
+    int errcode = g_check_integrity(gear);
+    if(errcode != 0)
+        *gear = old_gear;
 
     return 0;
 }
 
 int g_set_axle_radius(Gear* gear, double radius){
+    Gear old_gear = *gear;
+
     gear->axle_radius = radius;
+
+    int errcode = g_check_integrity(gear);
+    if(errcode != 0)
+        *gear = old_gear;
 
     return 0;
 }
 
 int g_set_teeth(Gear* gear, int teeth){
+    Gear old_gear = *gear;
+    
     gear->teeth = teeth;
+
+    int errcode = g_check_integrity(gear);
+    if(errcode != 0)
+        *gear = old_gear;
 
     return 0;
 }
 
 int g_set_modulo(Gear* gear, double modulo){
+
+    Gear old_gear = *gear;
+
     double teeth = (gear->reference_radius*2) / modulo;
     gear->teeth = int(teeth);
+
+    int errcode = g_check_integrity(gear);
+    if(errcode != 0)
+        *gear = old_gear;
 
     return 0;
 }
