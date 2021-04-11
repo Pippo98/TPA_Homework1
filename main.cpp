@@ -17,5 +17,9 @@ int main(){
 
     cout << g_to_string(gear) << endl;
 
+    g_set_modulo(gear, 0.5);
+
+    cout << g_to_string(gear) << endl;
+
     return 0;
 }

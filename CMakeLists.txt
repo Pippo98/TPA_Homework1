@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 
 # EXECUTABLE SECTION
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/)
 add_executable(main main.cpp)
 
 target_include_directories(main PRIVATE include)

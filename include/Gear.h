@@ -52,4 +52,14 @@ int g_set_radius(Gear* gear, double radius);
 */
 int g_set_teeth(Gear* gear, uint8_t teeth);
 
+
+/**
+* Sets teeth number with modulo value defined by: m = d/z
+* where d is diameter and z is number of teeths
+* 
+* @param gear gear to be modified
+* @param modulo value to be setted
+* return errcode
+*/
+int g_set_modulo(Gear* gear, double modulo);
 #endif

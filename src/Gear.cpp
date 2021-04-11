@@ -32,3 +32,10 @@ int g_set_teeth(Gear* gear, uint8_t teeth){
 
     return 0;
 }
+
+int g_set_modulo(Gear* gear, double modulo){
+    double teeth = (gear->radius*2) / modulo;
+    gear->teeth = int(teeth);
+
+    return 0;
+}
