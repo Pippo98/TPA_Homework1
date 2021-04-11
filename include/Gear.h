@@ -62,4 +62,29 @@ int g_set_teeth(Gear* gear, uint8_t teeth);
 * return errcode
 */
 int g_set_modulo(Gear* gear, double modulo);
+
+
+/**
+* Returns radius value
+* 
+* return radius
+*/
+double g_get_radius(Gear* gear);
+
+/*
+* Returns number of teeths
+*
+* return teeth
+*/
+uint8_t  g_get_teeth(Gear* gear);
+
+
+/*
+* Return modulo of the gear m=d/z
+* where d is diameter and z is teeth number
+*
+* return modulo
+*/
+double g_get_modulo(Gear* gear);
+
 #endif

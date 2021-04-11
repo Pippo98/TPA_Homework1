@@ -39,3 +39,15 @@ int g_set_modulo(Gear* gear, double modulo){
 
     return 0;
 }
+
+double g_get_radius(Gear* gear){
+    return gear->radius;
+}
+
+uint8_t g_get_teeth(Gear* gear){
+    return gear->teeth;
+}
+
+double g_get_modulo(Gear* gear){
+    return (gear->radius*2) / gear->teeth;
+}
