@@ -7,8 +7,11 @@
 using namespace std;
 
 struct Gear{
+
+    bool external_gear = true;
     
-    double radius = 0.0;
+    double reference_radius = 0.0;
+    double axle_radius = 0.0;
 
     int teeth = 0;
 };
@@ -16,12 +19,14 @@ struct Gear{
 /**
 * Initialize gear struct
 *
-* @param radius radius of gear
+* @param external_gear defines if teeth are external or internal
+* @param reference_radius reference radius of gear
+* @param axle_radius radius of axle
 * @param teeth numbers of teeths
 * return initialized Gear
 */
 
-Gear* g_init(double radius, int teeth);
+Gear* g_init(bool external_gear, double reference_radius, double axle_radius, int teeth);
 
 
 /**
@@ -34,13 +39,36 @@ string g_to_string(Gear* gear);
 
 
 /**
-* Sets radius of given gear
+* Sets external gear flag
+* when changing external_gear flag also the axle radius
+* must be changed for validation of the gear
+* 
+* @param gear to be modified
+* @param external flag to be setted
+* @param axle_radius radius to be modified
+* return errcode
+*/
+int g_set_external_gear(Gear* gear, bool external, double axle_radius);
+
+
+/**
+* Sets reference radius of given gear
 *
 * @param gear to be modified
 * @param radius to be setted
 * return errcode
 */
-int g_set_radius(Gear* gear, double radius);
+int g_set_reference_radius(Gear* gear, double radius);
+
+
+/**
+* Sets axle radius of given gear
+*
+* @param gear to be modified
+* @param radius to be setted
+* return errcode
+*/
+int g_set_axle_radius(Gear* gear, double radius);
 
 
 /**
@@ -65,11 +93,26 @@ int g_set_modulo(Gear* gear, double modulo);
 
 
 /**
-* Returns radius value
+* Returns the external gear flag
+* 
+* return external_gear flag
+*/
+bool g_get_external_gear(Gear* gear);
+
+/**
+* Returns reference radius value
 * 
 * return radius
 */
-double g_get_radius(Gear* gear);
+double g_get_reference_radius(Gear* gear);
+
+/**
+* Returns axle radius value
+* 
+* return radius
+*/
+double g_get_axle_radius(Gear* gear);
+
 
 /*
 * Returns number of teeths
