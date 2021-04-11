@@ -1,6 +1,6 @@
 #include "Gear.h"
 
-Gear* g_init(double radius, uint8_t teeth){
+Gear* g_init(double radius, int teeth){
     Gear* newGear = new Gear();
 
     newGear->radius = radius;
@@ -27,7 +27,7 @@ int g_set_radius(Gear* gear, double radius){
     return 0;
 }
 
-int g_set_teeth(Gear* gear, uint8_t teeth){
+int g_set_teeth(Gear* gear, int teeth){
     gear->teeth = teeth;
 
     return 0;
@@ -44,7 +44,7 @@ double g_get_radius(Gear* gear){
     return gear->radius;
 }
 
-uint8_t g_get_teeth(Gear* gear){
+int g_get_teeth(Gear* gear){
     return gear->teeth;
 }
 

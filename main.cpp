@@ -13,7 +13,7 @@ int main(){
 
     cout << g_to_string(gear) << endl;
  
-    g_set_teeth(gear, 51);
+    g_set_teeth(gear, -51);
 
     cout << g_to_string(gear) << endl;
 
@@ -22,7 +22,7 @@ int main(){
     cout << g_to_string(gear) << endl;
 
     cout << g_get_radius(gear) << endl;
-    cout << int(g_get_teeth(gear)) << endl;
+    cout << g_get_teeth(gear) << endl;
     cout << g_get_modulo(gear) << endl;
 
     return 0;
