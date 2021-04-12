@@ -1,6 +1,7 @@
 #ifndef GEAR_H
 #define GEAR_H
 
+#include <fstream>
 #include <iostream>
 #include <string.h>
 
@@ -46,6 +47,27 @@ string g_to_string(Gear* gear);
 * return errcode
 */
 int g_check_integrity(Gear* gear);
+
+
+/**
+* Returns a string in svg format
+* 
+* return svg string
+*/
+string g_to_svg(Gear* gear);
+
+/**
+* Saves gear as a svg file
+* 
+* @param gear gear to be saved
+* @param filename file name that will be used,
+*                 without extension
+* return errcode
+*/
+int g_export_svg(Gear* gear, string filename);
+
+
+
 
 /**
 * Sets external gear flag
@@ -168,5 +190,52 @@ double g_get_tooth_height(Gear* gear);
 * return thickness
 */
 double g_get_tooth_thickness(Gear* gear);
+
+/**
+* Get the angle between two near teeth
+* 
+* return angle
+*/
+double get_pitch_angle(Gear* gear);
+
+/**
+* Returns string of svg ellipse component
+*
+* @param cx center x of the ellipse
+* @param cy center y of the ellipse
+* @param rx radius x of the ellipse
+* @param ry radius y of the ellipse
+* @param style of the ellipse component
+* return string ellipse
+*/
+string _g_get_ellipse(double cx, double cy, double rx, double ry, string style);
+
+
+/**
+* Returns string of svg line
+* 
+* @param p1x
+* @param p1y
+* @param p2x
+* @param p2y
+* @param style of the ellipse component 
+*/
+string _g_get_line(double p1x, double p1y, double p2x, double p2y, string style);
+
+
+/**
+* 
+* 
+* 
+*/
+string _g_get_tooth_path();
+
+
+/**
+* 
+* 
+* 
+*/
+string _g_get_tooth(double traslationX, double traslationY, double rotation, double scale, string style="");
 
 #endif
