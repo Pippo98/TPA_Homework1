@@ -14,13 +14,13 @@ int main(){
     
     cout << g_to_string(gear) << endl;
 
-    g_set_reference_radius(gear, 21.3901431413);
+    g_set_reference_radius(gear, 210.3901431413);
 
     g_set_teeth(gear, -51);
 
     cout << g_to_string(gear) << endl;
  
-    g_set_modulo(gear, 0.6);
+    g_set_modulo(gear, 6);
 
     cout << g_to_string(gear) << endl;
     

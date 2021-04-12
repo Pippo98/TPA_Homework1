@@ -66,7 +66,6 @@ string g_to_svg(Gear* gear){
     int width = 640;
     int height = 480;
     
-
     float oversize = 1.1;
 
     string svg = "<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
@@ -87,8 +86,22 @@ string g_to_svg(Gear* gear){
                        (height/2) + gear->reference_radius * oversize,
                        "stroke='black' stroke-dasharray='5, 4' stroke-opacity='0.3'"
                        ) + "\n";
-                       
-    svg += _g_get_tooth(width/2, height/2, 20, 0.10, "stroke:black;fill:none;stroke-width:10") + "\n";
+
+    for (int i = 0; i < gear->teeth; i++){
+        double r = gear->reference_radius - g_get_dedendum(gear);
+        double alpha = (2 * G_PI / gear->teeth) * i;
+        double x = 0.0;
+        double y = 0.0;
+
+        _g_polar_to_cartesian(r, alpha, &x, &y);
+        x += width/2;
+        y += height/2;
+        alpha = alpha * 180/( G_PI) + 90 + 2;
+
+        double scale = (g_get_tooth_height(gear) / 100) * 1.5;
+
+        svg += _g_get_tooth(x, y, alpha, scale, "stroke:black;fill:none;stroke-width:10") + "\n";
+    }               
 
     
     svg += "\n</svg>";
@@ -257,4 +270,9 @@ string _g_get_tooth(double traslationX, double traslationY, double rotation, dou
     tooth += "</g>";
 
     return tooth;
+}
+
+void _g_polar_to_cartesian(double r, double alpha, double* x, double* y){
+    *x = r * cos(alpha);
+    *y = r * sin(alpha);
 }

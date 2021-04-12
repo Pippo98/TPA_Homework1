@@ -1,6 +1,7 @@
 #ifndef GEAR_H
 #define GEAR_H
 
+#include <math.h>
 #include <fstream>
 #include <iostream>
 #include <string.h>
@@ -224,18 +225,34 @@ string _g_get_line(double p1x, double p1y, double p2x, double p2y, string style)
 
 
 /**
+* Returns the path of a single tooth centered in origin
 * 
-* 
-* 
+* return string of path
 */
 string _g_get_tooth_path();
 
 
 /**
+* Returns a string representing the svg component of one tooth
+* It can be rotated scaled and translated
 * 
-* 
-* 
+* @param traslationX traslate on x axis
+* @param traslationY traslate on y axis
+* @param rotation rotates tooth in degrees
+* @param scale the tooth by the percentage (100% = 1.0). Note that
+*        the tooth component by default is 100 pixels wide.
+* @param style to spply ad the path, default null
 */
 string _g_get_tooth(double traslationX, double traslationY, double rotation, double scale, string style="");
+
+/**
+* Converts polar coordinates to cartesian coordinates
+* 
+* @param r radius
+* @param alpha angle in radians
+* @param x pointer to new x
+* @param y pointer to new y
+*/
+void _g_polar_to_cartesian(double r, double alpha, double* x, double* y);
 
 #endif
