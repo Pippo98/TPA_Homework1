@@ -112,8 +112,8 @@ string g_to_svg(Gear* gear){
 
     */
     
-    string invL = g_generate_tooth_involute(gear, 0.08, true );
-    string invR = g_generate_tooth_involute(gear, 0.08, false);
+    string invL = g_generate_tooth_involute(gear, 10, true );
+    string invR = g_generate_tooth_involute(gear, 10, false);
 
     svg += "<g transform='translate(" + to_string(width/2) + " " + to_string(height/2) + ")' >\n";
     for(int i = 0; i < gear->teeth; i++){
@@ -315,7 +315,9 @@ void _g_polar_to_cartesian(double r, double alpha, double* x, double* y){
 
 
 
-string g_generate_tooth_involute(Gear* gear, double increment, bool left_face){
+string g_generate_tooth_involute(Gear* gear, double chunks, bool left_face){
+
+    string path = "";
 
     int N = gear->teeth;
     double addendum = g_get_addendum(gear);              
@@ -329,47 +331,50 @@ string g_generate_tooth_involute(Gear* gear, double increment, bool left_face){
     double y = 0;
     double r = db/2;
     double t = 0;
+    double t0 = 0.0;
+    double t1 = 0.0;
+
+    double rp = dp / 2;
+    double a = addendum;
+
+    t1 = sqrt((a - r + rp)*(a + r + rp))/r;
+
+    double b = dedendum;
+    t0 = sqrt(-(-b + r + rp)*(b + r - rp))/r;
+    if(isnan(t0))
+        t0 = 0;
+
+    path += "<path fill='transparent' stroke-width='0.1' stroke='black' d='M " + to_string(db/2) + " 0" ;
 
 
-    string path = "<path fill='transparent' stroke-width='0.1' stroke='black' d='M " + to_string(db/2) + " 0" ;
+    double increment = (t1 - t0)/chunks;
+    t = t0;
+    bool last_cycle = false;
     while(true){
-        x = r * (cos(t) + t*sin(t));
-        y = r * (sin(t) - t*cos(t));
 
-        if(left_face)
-            t -= increment;
-        else
-            t += increment;
+        if(left_face){
+            x = r * (cos(-t) - t*sin(-t));
+            y = r * (sin(-t) + t*cos(-t));
+        }
+        else{
+            x = r * (cos(t) + t*sin(t));
+            y = r * (sin(t) - t*cos(t));
+        }
 
-        if(sqrt(x*x+y*y) > dp / 2 + addendum)
+        path += " L " + to_string(x) + " " + to_string(y);
+        //path += " c " + to_string(0.01) + " " + to_string(0.01) + ", " + to_string(0.01) + " " + to_string(0.01) + ", " + to_string(x) + " " + to_string(y);
+        
+        t += increment;
+        if(last_cycle)
             break;
-//        if(sqrt(x*x+y*y) < dp / 2 - dedendum)
-//            continue;
-
-        // path += " L " + to_string(x) + " " + to_string(y);
-        path += " C " + to_string(x*1.001) + " " + to_string(y*0.999) + ", " + to_string(x*0.999) + " " + to_string(y*0.99) + ", " + to_string(x) + " " + to_string(y);
+        if(t > t1 && !last_cycle){
+            last_cycle=true;
+            t = t1;
+        }
 
     }
 
     path += "'/>'";
-    double rp = dp / 2;
-    double a = addendum;
-    t = -sqrt((a - r + rp)*(a + r + rp))/r;
-    if(!left_face)
-        t *= -1;
-    x = r * (cos(t) + t*sin(t));
-    y = r * (sin(t) - t*cos(t));
-    
-    path += _g_get_ellipse(x,y,1,1,"");
-
-    double b = dedendum;
-    t = sqrt(-(-b + r + rp)*(b + r - rp))/r;
-    x = r * (cos(t) + t*sin(t));
-    y = r * (sin(t) - t*cos(t));
-
-    cout << x << " " << y << endl;
-    
-    path += _g_get_ellipse(x,y,1,1,"");
 
     return path;
 

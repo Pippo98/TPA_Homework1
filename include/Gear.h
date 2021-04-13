@@ -19,7 +19,7 @@ struct Gear{
 
     int teeth = 0;
 
-    double pressure_angle = 20;
+    double pressure_angle = 33;
 };
 
 /**
@@ -271,6 +271,6 @@ string _g_get_tooth(double traslationX, double traslationY, double rotation, dou
 void _g_polar_to_cartesian(double r, double alpha, double* x, double* y);
 
 
-string g_generate_tooth_involute(Gear* gear, double increment, bool left_face);
+string g_generate_tooth_involute(Gear* gear, double chunks, bool left_face);
 
 #endif
