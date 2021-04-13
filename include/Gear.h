@@ -18,6 +18,8 @@ struct Gear{
     double axle_radius = 0.0;
 
     int teeth = 0;
+
+    double pressure_angle = 20;
 };
 
 /**
@@ -145,6 +147,12 @@ double g_get_reference_radius(Gear* gear);
 */
 double g_get_axle_radius(Gear* gear);
 
+/**
+* Returns base radius (base of the tooth)
+* 
+* return radius
+*/
+double g_get_base_radius(Gear* gear);
 
 /*
 * Returns number of teeths
@@ -254,5 +262,8 @@ string _g_get_tooth(double traslationX, double traslationY, double rotation, dou
 * @param y pointer to new y
 */
 void _g_polar_to_cartesian(double r, double alpha, double* x, double* y);
+
+
+string g_generate_tooth_involute(Gear* gear);
 
 #endif

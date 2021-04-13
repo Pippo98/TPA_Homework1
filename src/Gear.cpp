@@ -71,10 +71,14 @@ string g_to_svg(Gear* gear){
     string svg = "<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
     "<svg version='1.1' viewBox='0 0 640 480' xmlns='http://www.w3.org/2000/svg' style='background: white' >\n";
 
-    svg += _g_get_ellipse(width/2, height/2, gear->reference_radius, gear->reference_radius, "fill:none;stroke:black") + "\n";
-    svg += _g_get_ellipse(width/2, height/2, gear->axle_radius, gear->axle_radius, "fill:none;stroke:black") + "\n";
-    svg += _g_get_ellipse(width/2, height/2, gear->reference_radius - g_get_dedendum(gear),  gear->reference_radius - g_get_dedendum(gear), "fill:none;stroke:black;stroke-width:0.5") + "\n";
-    svg += _g_get_ellipse(width/2, height/2, gear->reference_radius + g_get_addendum(gear),  gear->reference_radius + g_get_addendum(gear), "fill:none;stroke:black;stroke-width:0.5") + "\n";
+    
+
+    svg += _g_get_ellipse(width/2, height/2, gear->reference_radius, gear->reference_radius, "fill:none;stroke:black;stroke-width:0.3") + "\n";
+    svg += _g_get_ellipse(width/2, height/2, gear->axle_radius, gear->axle_radius, "fill:none;stroke:black;stroke-width:0.3") + "\n";
+    svg += _g_get_ellipse(width/2, height/2, g_get_base_radius(gear),  g_get_base_radius(gear), "fill:none;stroke:black;stroke-width:0.3") + "\n";
+    svg += _g_get_ellipse(width/2, height/2, gear->reference_radius - g_get_dedendum(gear),  gear->reference_radius - g_get_dedendum(gear), "fill:none;stroke:black;stroke-width:0.3") + "\n";
+    svg += _g_get_ellipse(width/2, height/2, gear->reference_radius + g_get_addendum(gear),  gear->reference_radius + g_get_addendum(gear), "fill:none;stroke:black;stroke-width:0.3") + "\n";
+    /*
 
     svg += _g_get_line((width/2) - gear->reference_radius * oversize,
                        (height/2),
@@ -104,7 +108,12 @@ string g_to_svg(Gear* gear){
         double stroke_width = 1/scale;
 
         svg += _g_get_tooth(x, y, alpha, scale, "stroke:black;fill:none;stroke-width:" + to_string(stroke_width)) + "\n";
-    }               
+    }
+
+    */
+    svg += "<g transform='translate(" + to_string(width/2) + " " + to_string(height/2) + ")' >";
+    svg += g_generate_tooth_involute(gear);
+    svg += "</g>";
 
     
     svg += "\n</svg>";
@@ -193,6 +202,10 @@ double g_get_axle_radius(Gear* gear){
     return gear->axle_radius;
 }
 
+double g_get_base_radius(Gear* gear){
+    return  gear->reference_radius * cos(gear->pressure_angle * G_PI / 180.0);
+}
+
 int g_get_teeth(Gear* gear){
     return gear->teeth;
 }
@@ -206,7 +219,7 @@ double g_get_addendum(Gear* gear){
 }
 
 double g_get_dedendum(Gear* gear){
-    return 1.25 * g_get_modulo(gear);
+    return 1.157 * g_get_modulo(gear);
 }
 
 double g_get_tooth_height(Gear* gear){
@@ -278,4 +291,73 @@ string _g_get_tooth(double traslationX, double traslationY, double rotation, dou
 void _g_polar_to_cartesian(double r, double alpha, double* x, double* y){
     *x = r * cos(alpha);
     *y = r * sin(alpha);
+}
+
+
+
+string g_generate_tooth_involute(Gear* gear){
+
+    cout << g_to_string(gear) << endl;
+    
+    int N = gear->teeth;
+    double a =  gear->pressure_angle;
+    double modulo = g_get_modulo(gear);
+    double P = 1.0/modulo;                          // diametral pitch
+    double addendum = g_get_addendum(gear);              
+    double dedendum = g_get_dedendum(gear);        
+    double dp = gear->reference_radius * 2;
+    double db = g_get_base_radius(gear) * 2;
+
+    double alpha = (sqrt(dp*dp-db*db)/db) * 180/G_PI - a;
+    double beta  = 2.0 * (360.0/(4.0*N) - alpha);
+    
+    double x = 0;
+    double y = 0;
+    double r = db/2;
+    double t = 0;
+    double increment = 0.005;
+
+    string points = "";
+    for(int i = 0; i < N; i++){
+        t = 0;
+
+        points += "<g transform='rotate(" + to_string((360.0/N)*i) + " 0 0)' >";
+
+        while(true){
+            x = r * (cos(t) + t*sin(t));
+            y = r * (sin(t) - t*cos(t));
+            t += increment;
+
+            //cout << x << ";" << y << ";" << endl;
+
+            if(sqrt(x*x+y*y) > dp / 2 + addendum)
+                break;
+            if(sqrt(x*x+y*y) < dp / 2 - dedendum)
+                continue;
+
+            points += _g_get_ellipse(x, y, 0.1, 0.1, "fill:none;stroke:black;stroke-width:0.1") + "\n";
+        }
+        t = 0;
+        
+        points += "<g transform='rotate(" + to_string(-beta) + " 0 0)' >";
+        while(true){
+            x = r * (cos(t) + t*sin(t));
+            y = r * (sin(t) - t*cos(t));
+            t -= increment;
+
+            //cout << x << ";" << y << ";" << endl;
+
+            if(sqrt(x*x+y*y) > dp / 2 + addendum)
+                break;
+            if(sqrt(x*x+y*y) < dp / 2 - dedendum)
+                continue;
+
+            points += _g_get_ellipse(x, y, 0.1, 0.1, "fill:none;stroke:black;stroke-width:0.1") + "\n";
+        }
+        points += "</g>";
+        points += "</g>";
+    }
+
+    return points;
+
 }
