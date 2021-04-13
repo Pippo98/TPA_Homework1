@@ -69,10 +69,12 @@ string g_to_svg(Gear* gear){
     float oversize = 1.1;
 
     string svg = "<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n"
-    "<svg version='1.1' viewBox='0 0 640 480' xmlns='http://www.w3.org/2000/svg'>\n";
+    "<svg version='1.1' viewBox='0 0 640 480' xmlns='http://www.w3.org/2000/svg' style='background: white' >\n";
 
     svg += _g_get_ellipse(width/2, height/2, gear->reference_radius, gear->reference_radius, "fill:none;stroke:black") + "\n";
     svg += _g_get_ellipse(width/2, height/2, gear->axle_radius, gear->axle_radius, "fill:none;stroke:black") + "\n";
+    svg += _g_get_ellipse(width/2, height/2, gear->reference_radius - g_get_dedendum(gear),  gear->reference_radius - g_get_dedendum(gear), "fill:none;stroke:black;stroke-width:0.5") + "\n";
+    svg += _g_get_ellipse(width/2, height/2, gear->reference_radius + g_get_addendum(gear),  gear->reference_radius + g_get_addendum(gear), "fill:none;stroke:black;stroke-width:0.5") + "\n";
 
     svg += _g_get_line((width/2) - gear->reference_radius * oversize,
                        (height/2),
@@ -96,11 +98,12 @@ string g_to_svg(Gear* gear){
         _g_polar_to_cartesian(r, alpha, &x, &y);
         x += width/2;
         y += height/2;
-        alpha = alpha * 180/( G_PI) + 90 + 2;
+        alpha = alpha * 180/( G_PI) + 90;
 
-        double scale = (g_get_tooth_height(gear) / 100) * 1.5;
+        double scale = (g_get_tooth_height(gear) / 83);
+        double stroke_width = 1/scale;
 
-        svg += _g_get_tooth(x, y, alpha, scale, "stroke:black;fill:none;stroke-width:10") + "\n";
+        svg += _g_get_tooth(x, y, alpha, scale, "stroke:black;fill:none;stroke-width:" + to_string(stroke_width)) + "\n";
     }               
 
     
@@ -248,7 +251,7 @@ string _g_get_line(double p1x, double p1y, double p2x, double p2y, string style)
 
 
 string _g_get_tooth_path(){
-    return "M 0.28239468,-0.12839759 15.870449,-3.2483876 c 3.62898,-1.03 6.051609,-3.46 7.055629,-7.5500004 0.5086,-4.41 1.52616,-7.13 0.8205,-15.587 -1.15718,-8.04 -3.516779,-8.18 -4.266229,-14.275 0.979299,-13.108 5.146839,-29.746 17.064823,-46.92899 l 25.597261,-0.2 c 3.91099,6.46 16.539136,20.07699 18.213257,49.38899 -0.9539,5.17 -2.22611,4.36 -3.77391,12.142 -0.4077,4.56 -0.792799,10.603 0.8205,16.4090004 1.74844,4.81 2.20722,4.97 5.57887,6.23 l 16.736476,3.77999001";
+    return "m -50,0 c 7.98916639,-1.0591 13.06514719,-8.7503 14.15291219,-16.2238 2.94506,-12.0289 5.721739,-24.1012 9.100499,-36.0213 2.95132,-10.6221 6.373089,-21.1807 11.366588,-31.0392 10.254553,-0.036 20.509142,-0.066 30.763632,-0.1151 7.252781,14.3371 11.14309,30.0662 15.258794,45.5122 2.534188,9.1705 3.90878,18.6713 7.106733,27.6448 1.935329,5.3018 6.631847,9.2907 12.23689,10.1263";
 }
 
 

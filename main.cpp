@@ -41,7 +41,8 @@ int main(){
     cout << "Tooth height: "    << g_get_tooth_height(gear)     << endl;
     cout << "Tooth thickness: " << g_get_tooth_thickness(gear)  << endl;
 
-
+    g_set_teeth(gear, 60);
+    g_set_reference_radius(gear, 200);
     cout << g_export_svg(gear, "gear") << endl;
 
     return 0;
