@@ -111,8 +111,19 @@ string g_to_svg(Gear* gear){
     }
 
     */
-    svg += "<g transform='translate(" + to_string(width/2) + " " + to_string(height/2) + ")' >";
-    svg += g_generate_tooth_involute(gear);
+    
+    string invL = g_generate_tooth_involute(gear, 0.08, true );
+    string invR = g_generate_tooth_involute(gear, 0.08, false);
+
+    svg += "<g transform='translate(" + to_string(width/2) + " " + to_string(height/2) + ")' >\n";
+    for(int i = 0; i < gear->teeth; i++){
+        svg += "<g transform='rotate(" + to_string((360.0/gear->teeth)*i) + " 0 0)' >\n";
+        svg += invR + "\n";
+        svg += "<g transform='rotate(" + to_string(-g_get_beta(gear)) + " 0 0)' >\n";
+        svg += invL + "\n";
+        svg += "</g>\n";
+        svg += "</g>\n";
+    }
     svg += "</g>";
 
     
@@ -234,6 +245,15 @@ double g_get_pitch_angle(Gear* gear){
     return (2 * G_PI * gear->reference_radius) / gear->teeth;
 }
 
+double g_get_beta(Gear* gear){
+    int N = gear->teeth;
+    double a =  gear->pressure_angle;
+    double dp = gear->reference_radius * 2;
+    double db = g_get_base_radius(gear) * 2;
+    double alpha = (sqrt(dp*dp-db*db)/db) * 180/G_PI - a;
+    return 2.0 * (360.0/(4.0*N) - alpha);
+}
+
 string _g_get_ellipse(double cx, double cy, double rx, double ry, string style){
     string ellipse = "<ellipse ";
 
@@ -295,69 +315,62 @@ void _g_polar_to_cartesian(double r, double alpha, double* x, double* y){
 
 
 
-string g_generate_tooth_involute(Gear* gear){
+string g_generate_tooth_involute(Gear* gear, double increment, bool left_face){
 
-    cout << g_to_string(gear) << endl;
-    
     int N = gear->teeth;
-    double a =  gear->pressure_angle;
-    double modulo = g_get_modulo(gear);
-    double P = 1.0/modulo;                          // diametral pitch
     double addendum = g_get_addendum(gear);              
     double dedendum = g_get_dedendum(gear);        
     double dp = gear->reference_radius * 2;
     double db = g_get_base_radius(gear) * 2;
 
-    double alpha = (sqrt(dp*dp-db*db)/db) * 180/G_PI - a;
-    double beta  = 2.0 * (360.0/(4.0*N) - alpha);
+    double beta = g_get_beta(gear);
     
     double x = 0;
     double y = 0;
     double r = db/2;
     double t = 0;
-    double increment = 0.005;
 
-    string points = "";
-    for(int i = 0; i < N; i++){
-        t = 0;
 
-        points += "<g transform='rotate(" + to_string((360.0/N)*i) + " 0 0)' >";
+    string path = "<path fill='transparent' stroke-width='0.1' stroke='black' d='M " + to_string(db/2) + " 0" ;
+    while(true){
+        x = r * (cos(t) + t*sin(t));
+        y = r * (sin(t) - t*cos(t));
 
-        while(true){
-            x = r * (cos(t) + t*sin(t));
-            y = r * (sin(t) - t*cos(t));
+        if(left_face)
+            t -= increment;
+        else
             t += increment;
 
-            //cout << x << ";" << y << ";" << endl;
+        if(sqrt(x*x+y*y) > dp / 2 + addendum)
+            break;
+//        if(sqrt(x*x+y*y) < dp / 2 - dedendum)
+//            continue;
 
-            if(sqrt(x*x+y*y) > dp / 2 + addendum)
-                break;
-            if(sqrt(x*x+y*y) < dp / 2 - dedendum)
-                continue;
+        // path += " L " + to_string(x) + " " + to_string(y);
+        path += " C " + to_string(x*1.001) + " " + to_string(y*0.999) + ", " + to_string(x*0.999) + " " + to_string(y*0.99) + ", " + to_string(x) + " " + to_string(y);
 
-            points += _g_get_ellipse(x, y, 0.1, 0.1, "fill:none;stroke:black;stroke-width:0.1") + "\n";
-        }
-        t = 0;
-        
-        points += "<g transform='rotate(" + to_string(-beta) + " 0 0)' >";
-        while(true){
-            x = r * (cos(t) + t*sin(t));
-            y = r * (sin(t) - t*cos(t));
-            t -= increment;
-
-            //cout << x << ";" << y << ";" << endl;
-
-            if(sqrt(x*x+y*y) > dp / 2 + addendum)
-                break;
-            if(sqrt(x*x+y*y) < dp / 2 - dedendum)
-                continue;
-
-            points += _g_get_ellipse(x, y, 0.1, 0.1, "fill:none;stroke:black;stroke-width:0.1") + "\n";
-        }
-        points += "</g>";
-        points += "</g>";
     }
 
-    return points;
+    path += "'/>'";
+    double rp = dp / 2;
+    double a = addendum;
+    t = -sqrt((a - r + rp)*(a + r + rp))/r;
+    if(!left_face)
+        t *= -1;
+    x = r * (cos(t) + t*sin(t));
+    y = r * (sin(t) - t*cos(t));
+    
+    path += _g_get_ellipse(x,y,1,1,"");
+
+    double b = dedendum;
+    t = sqrt(-(-b + r + rp)*(b + r - rp))/r;
+    x = r * (cos(t) + t*sin(t));
+    y = r * (sin(t) - t*cos(t));
+
+    cout << x << " " << y << endl;
+    
+    path += _g_get_ellipse(x,y,1,1,"");
+
+    return path;
 
 }

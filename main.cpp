@@ -43,7 +43,7 @@ int main(){
 
     g_set_teeth(gear, 40);
     g_set_axle_radius(gear, 20);
-    g_set_reference_radius(gear, 100);
+    g_set_reference_radius(gear, 10);
     g_export_svg(gear, "gear");
 
 

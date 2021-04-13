@@ -208,6 +208,13 @@ double g_get_tooth_thickness(Gear* gear);
 double get_pitch_angle(Gear* gear);
 
 /**
+* Get the angle between two near teeth
+* 
+* return angle
+*/
+double g_get_beta(Gear* gear);
+
+/**
 * Returns string of svg ellipse component
 *
 * @param cx center x of the ellipse
@@ -264,6 +271,6 @@ string _g_get_tooth(double traslationX, double traslationY, double rotation, dou
 void _g_polar_to_cartesian(double r, double alpha, double* x, double* y);
 
 
-string g_generate_tooth_involute(Gear* gear);
+string g_generate_tooth_involute(Gear* gear, double increment, bool left_face);
 
 #endif
