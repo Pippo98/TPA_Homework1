@@ -42,10 +42,11 @@ int main(){
     cout << "Tooth height: "    << g_get_tooth_height(gear)     << endl;
     cout << "Tooth thickness: " << g_get_tooth_thickness(gear)  << endl;*/
     
-    gear = g_init(true, 280, 2, 52);
+    gear = g_init(true, 280, 2, 52, 15);
     g_set_modulo(gear, 8);
     g_export_svg(gear, "gear");
-
+    
+    g_from_svg("gear");
 
     return 0;
 }

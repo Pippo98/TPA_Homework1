@@ -19,7 +19,7 @@ struct Gear{
 
     int teeth = 0;
 
-    double pressure_angle = 20;
+    double pressure_angle = 0.0;
 };
 
 /**
@@ -32,7 +32,7 @@ struct Gear{
 * return initialized Gear
 */
 
-Gear* g_init(bool external_gear, double reference_radius, double axle_radius, int teeth);
+Gear* g_init(bool external_gear, double reference_radius, double axle_radius, int teeth, double pressure_angle=20);
 
 
 /**
@@ -70,6 +70,7 @@ string g_to_svg(Gear* gear);
 int g_export_svg(Gear* gear, string filename);
 
 
+Gear* g_from_svg(string filename);
 
 
 /**

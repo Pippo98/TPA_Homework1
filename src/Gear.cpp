@@ -1,6 +1,6 @@
 #include "Gear.h"
 
-Gear* g_init(bool external_gear, double reference_radius, double axle_radius, int teeth){
+Gear* g_init(bool external_gear, double reference_radius, double axle_radius, int teeth, double pressure_angle){
     Gear* newGear = new Gear();
 
     newGear->external_gear = external_gear;
@@ -9,6 +9,8 @@ Gear* g_init(bool external_gear, double reference_radius, double axle_radius, in
     newGear->axle_radius = axle_radius;
 
     newGear->teeth = teeth;
+
+    newGear->pressure_angle = pressure_angle;
 
     if(g_check_integrity(newGear) != 0)
         return NULL;
@@ -28,6 +30,8 @@ string g_to_string(Gear* gear){
     ret += to_string(gear->axle_radius);
     ret += "\n\tTeeth: ";
     ret += to_string(gear->teeth);
+    ret += "\n\tAlpha: ";
+    ret += to_string(gear->pressure_angle);
 
     return ret;
 }
@@ -138,6 +142,54 @@ int g_export_svg(Gear* gear, string filename){
     file << g_to_svg(gear);
     file.close();
     return 0;
+}
+
+Gear* g_from_svg(string filename){
+    ifstream svg(filename + ".svg");
+    string line="";
+
+    bool external;
+    double r1;
+    double r2;
+    int N;
+    double alpha;
+
+    if (svg.is_open()){
+        while(getline(svg, line)){
+            size_t index = 0;
+            index = line.find("external_gear:");
+            if(index != string::npos){
+                index = line.find_last_of(":");
+                external = stoi(line.substr(index+1))==1 ? true : false;
+            }
+            index = line.find("reference_radius:");
+            if(index != string::npos){
+                index = line.find_last_of(":");
+                r1 = stod(line.substr(index+1));
+            }
+            index = line.find("axle_radius:");
+            if(index != string::npos){
+                index = line.find_last_of(":");
+                r2 = stod(line.substr(index+1));
+            }
+            index = line.find("teeth:");
+            if(index != string::npos){
+                index = line.find_last_of(":");
+                N = stoi(line.substr(index+1));
+            }
+            index = line.find("pressure_angle:");
+            if(index != string::npos){
+                index = line.find_last_of(":");
+                alpha = stod(line.substr(index+1));
+            }
+        }
+        svg.close();
+    }
+
+    Gear* gear = g_init(external, r1, r2, N, alpha);
+
+    cout << g_to_string(gear) << endl;
+    return NULL;
 }
 
 int g_set_external_gear(Gear* gear, bool external, double axle_radius){
