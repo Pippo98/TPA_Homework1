@@ -19,7 +19,7 @@ struct Gear{
 
     int teeth = 0;
 
-    double pressure_angle = 33;
+    double pressure_angle = 2;
 };
 
 /**
@@ -270,7 +270,39 @@ string _g_get_tooth(double traslationX, double traslationY, double rotation, dou
 */
 void _g_polar_to_cartesian(double r, double alpha, double* x, double* y);
 
+/**
+* Converts cartesian coordinates to polar
+* 
+* @param x
+* @param y
+* @param r radius
+* @param alpha angle
+*/
+void _g_cartesian_to_polar(double x, double y, double* r, double* alpha);
 
+/**
+* 
+* 
+*/
+void _g_rotate_point(double* x, double* y, double alpha);
+/**
+* The shape of the tooth depends on the parameters of the gear.
+* Calculate a path for the given gear, then can be repeated for all the teeth.
+* 
+* @param gear
+* @param cunks resolution of the tooth shape ( greater num greater resolution 10 is ok)
+* @param left_face computes different paths depending on the face requested
+* return string representing svg path of one tooth face
+*/
 string g_generate_tooth_involute(Gear* gear, double chunks, bool left_face);
+
+
+/**
+* Generates the path to draw the bottom path to connect two teeth
+* 
+* 
+* 
+*/
+string g_generate_tooth_connection_path(Gear* gear);
 
 #endif
