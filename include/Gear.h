@@ -19,7 +19,7 @@ struct Gear{
 
     int teeth = 0;
 
-    double pressure_angle = 2;
+    double pressure_angle = 20;
 };
 
 /**
@@ -124,6 +124,15 @@ int g_set_teeth(Gear* gear, int teeth);
 * return errcode
 */
 int g_set_modulo(Gear* gear, double modulo);
+
+/**
+* Sets Pressure angle
+* 
+* @param gear gear to be modified
+* @param angle pressure angle
+* return errcode
+*/
+int g_set_pressure_angle(Gear* gear, double angle);
 
 
 /**

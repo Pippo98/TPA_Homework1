@@ -5,7 +5,8 @@
 using namespace std;
 
 int main(){
-    Gear* gear = g_init(true, 20, 10, 5);
+    Gear* gear = g_init(true, 180, 10, 5);
+    /*
 
     if(gear == NULL){
         cout << "Gear not valid" << endl;
@@ -39,11 +40,10 @@ int main(){
     cout << "Addeddum: "        << g_get_addendum(gear)         << endl;
     cout << "Dedendum: "        << g_get_dedendum(gear)         << endl;
     cout << "Tooth height: "    << g_get_tooth_height(gear)     << endl;
-    cout << "Tooth thickness: " << g_get_tooth_thickness(gear)  << endl;
-
-    g_set_teeth(gear, 21);
-    g_set_axle_radius(gear, 20);
-    g_set_reference_radius(gear, 180);
+    cout << "Tooth thickness: " << g_get_tooth_thickness(gear)  << endl;*/
+    
+    gear = g_init(true, 280, 2, 52);
+    g_set_modulo(gear, 8);
     g_export_svg(gear, "gear");
 
 
