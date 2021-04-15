@@ -70,6 +70,12 @@ string g_to_svg(Gear* gear);
 int g_export_svg(Gear* gear, string filename);
 
 
+/**
+* Gets a svg file, parse it, and returns an instance of the gear or NULL
+*
+* @param filename, path without extension
+* return NULL or instance of Gear
+*/
 Gear* g_from_svg(string filename);
 
 

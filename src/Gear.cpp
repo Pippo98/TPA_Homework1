@@ -71,37 +71,58 @@ int g_check_integrity(Gear* gear){
 string g_to_svg(Gear* gear){
     int width = 640;
     int height = 480;
+    int a_duration = 20;
 
     float stroke = 1;
-
-    string svg = "";
-    string quote_style = "fill:none;stroke:blue;stroke-width:" + to_string(stroke/2);
-
     float oversize = 1.1;
 
-
+    string svg = "";
+    string quote_style = "fill:none;stroke:blue;stroke-width:"  + to_string(stroke/3);
+    string gear_style  = "fill:none;stroke:black;stroke-width:" + to_string(stroke);
+    
+    
+    // SVG header
     svg += "<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n";
     svg += "<svg version='1.1' viewBox='0 0 640 480' xmlns='http://www.w3.org/2000/svg' style='background: white' >\n";
-
-    // Hacky thing
+    
+    // Header to be able to load gear parameters
     svg += "\n\n<!--\n";
     svg += "Gear n° 1\n";
-    svg += "external:"+to_string(gear->external_gear)+"\n";
+    svg += "external_gear:"+to_string(gear->external_gear)+"\n";
     svg += "reference_radius:"+to_string(gear->reference_radius)+"\n";
     svg += "axle_radius:"+to_string(gear->axle_radius)+"\n";
     svg += "teeth:"+to_string(gear->teeth)+"\n";
     svg += "pressure_angle:"+to_string(gear->pressure_angle) + "\n";
     svg += "-->\n\n\n";
+
     
-    /*
-    svg += _g_get_ellipse(width/2, height/2, g_get_base_radius(gear),  g_get_base_radius(gear), quote_style) + "\n";
-    svg += _g_get_ellipse(width/2, height/2, gear->axle_radius, gear->axle_radius, quote_style) + "\n";
-    svg += _g_get_ellipse(width/2, height/2, gear->reference_radius - g_get_dedendum(gear),  gear->reference_radius - g_get_dedendum(gear), quote_style) + "\n";
-    */
+    // Container for animation
+    // Add rotation animation
+    svg += "<g>";
+    svg += "<animateTransform attributeName='transform' attributeType='XML' "
+                          "type='rotate' "
+                          "from='0 " + to_string(width/2) + " " + to_string(height/2) + "' "
+                          "to='" + to_string(360.0) + " "  + to_string(width/2) + " " + to_string(height/2) + "' "
+                          "dur='" + to_string(a_duration) + "s' "
+                          "repeatCount='indefinite' "
+                          "/>";
     
-    svg += _g_get_ellipse(width/2, height/2, gear->reference_radius, gear->reference_radius, quote_style) + "\n";
-    svg += _g_get_ellipse(width/2, height/2, gear->reference_radius + g_get_addendum(gear),  gear->reference_radius + g_get_addendum(gear), quote_style) + "\n";
-    
+    // Draw reference circle and axle circle
+    svg += _g_get_ellipse(width/2,
+                          height/2,
+                          gear->reference_radius,
+                          gear->reference_radius,
+                          quote_style)
+                          + "\n";
+    svg += _g_get_ellipse(width/2, height/2, gear->axle_radius, gear->axle_radius, gear_style) + "\n";
+
+    // Dimension lines and circles
+    svg += _g_get_ellipse(width/2,
+                          height/2,
+                          gear->reference_radius + g_get_addendum(gear),
+                          gear->reference_radius + g_get_addendum(gear),
+                          quote_style)
+                          + "\n";
     svg += _g_get_line((width/2) - gear->reference_radius * oversize,
                        (height/2),
                        (width/2) + gear->reference_radius * oversize,
@@ -114,23 +135,28 @@ string g_to_svg(Gear* gear){
                        (height/2) + gear->reference_radius * oversize,
                        "stroke='black' stroke-dasharray='5, 4' stroke-opacity='0.3'"
                        ) + "\n";
-
-    string invL = "<path stroke-width='" + to_string(stroke) + "' stroke='black' fill='none' d='";
+    
+    // Generate the tooth shape
+    string invL = "<path style='" + gear_style +  "' d='";
     invL += g_generate_tooth_involute(gear, 10, true ) + "' />\n";
-    string invR = "<path stroke-width='" + to_string(stroke) + "' stroke='black' fill='none' d='";
+    string invR = "<path style='" + gear_style +  "' d='";
     invR += g_generate_tooth_involute(gear, 10, false) + "' />\n";
-
+    
     svg += "<g transform='translate(" + to_string(width/2) + " " + to_string(height/2) + ") ";
-    //svg += "rotate(" + to_string(-g_get_beta(gear)/2) + " 0 0) ";
     svg += "' >\n";
+    
+    // Draw right face, then rotate of beta angle and draw left face
+    // Then draw another tooth
     for(int i = 0; i < gear->teeth; i++){
-        svg += "<g transform='rotate(" + to_string((360.0/gear->teeth)*i) + " 0 0)' >\n";
+        svg += "<g id='toothn" + to_string(i+1) + "' " + "transform='rotate(" + to_string((360.0/gear->teeth)*i) + " 0 0)' >\n";
         svg += invR;
         svg += "<g transform='rotate(" + to_string(-g_get_beta(gear)) + " 0 0)' >\n";
         svg += invL;
         svg += "</g>\n";
         svg += "</g>\n";
     }
+
+    svg += "</g>";
     svg += "</g>";
     
     svg += "\n</svg>";
@@ -188,8 +214,7 @@ Gear* g_from_svg(string filename){
 
     Gear* gear = g_init(external, r1, r2, N, alpha);
 
-    cout << g_to_string(gear) << endl;
-    return NULL;
+    return gear;
 }
 
 int g_set_external_gear(Gear* gear, bool external, double axle_radius){

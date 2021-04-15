@@ -45,8 +45,17 @@ int main(){
     gear = g_init(true, 280, 2, 52, 15);
     g_set_modulo(gear, 8);
     g_export_svg(gear, "gear");
-    
+    g_from_svg("gear");
+    cout << g_to_string(gear) << endl;
+
+    gear = g_init(false, 180, 200, 52, 11);
+    if(gear == NULL)
+        return -1;
+    g_export_svg(gear, "gear");
     g_from_svg("gear");
 
+    if(gear == NULL)
+        return -1;
+    cout << g_to_string(gear) << endl;
     return 0;
 }
