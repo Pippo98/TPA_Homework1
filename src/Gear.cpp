@@ -112,9 +112,10 @@ string g_to_svg(Gear* gear){
                           height/2,
                           gear->reference_radius,
                           gear->reference_radius,
-                          quote_style)
+                          quote_style,
+                          "reference")
                           + "\n";
-    svg += _g_get_ellipse(width/2, height/2, gear->axle_radius, gear->axle_radius, gear_style) + "\n";
+    svg += _g_get_ellipse(width/2, height/2, gear->axle_radius, gear->axle_radius, gear_style, "axle") + "\n";
 
     // Dimension lines and circles
     svg += _g_get_ellipse(width/2,
@@ -170,44 +171,71 @@ int g_export_svg(Gear* gear, string filename){
     return 0;
 }
 
+string _g_get_svg_arg(string line, string arg){
+  size_t index1 = 0;
+  size_t index2 = 0;
+
+  if(line.find(arg) == string::npos)
+    return "";
+  
+  if(arg.find("=") == string::npos){
+    arg += "='";
+  }else if(arg.find("'") == string::npos){
+    arg += "'";
+  }
+  
+  index1 = line.find(arg);
+  index1 += arg.length();
+  index2 = line.find("'", index1);
+  return line.substr(index1, index2 - index1);
+}
+
 Gear* g_from_svg(string filename){
     ifstream svg(filename + ".svg");
     string line="";
 
-    bool external;
-    double r1;
-    double r2;
-    int N;
-    double alpha;
+    bool external = false;
+    double r1 = 0.0;
+    double r2 = 0.0;
+    int N = 0;
+    double alpha = 0.0;
+
+    bool gear_param_comment = false;
 
     if (svg.is_open()){
         while(getline(svg, line)){
             size_t index = 0;
-            index = line.find("external_gear:");
-            if(index != string::npos){
-                index = line.find_last_of(":");
-                external = stoi(line.substr(index+1))==1 ? true : false;
-            }
-            index = line.find("reference_radius:");
-            if(index != string::npos){
-                index = line.find_last_of(":");
-                r1 = stod(line.substr(index+1));
-            }
-            index = line.find("axle_radius:");
-            if(index != string::npos){
-                index = line.find_last_of(":");
-                r2 = stod(line.substr(index+1));
-            }
-            index = line.find("teeth:");
-            if(index != string::npos){
-                index = line.find_last_of(":");
-                N = stoi(line.substr(index+1));
-            }
-            index = line.find("pressure_angle:");
-            if(index != string::npos){
+
+            if(gear_param_comment){
+
+              if(line.find("pressure_angle:") != string::npos){
                 index = line.find_last_of(":");
                 alpha = stod(line.substr(index+1));
+              }
+              if(line.find("external_gear:") != string::npos){
+                index = line.find_last_of(":");
+                external = stoi(line.substr(index+1)) == 1 ? true : false;
+              }
+
+              if(line.find("-->") != string::npos)
+                gear_param_comment = false;
             }
+            else{
+              if(line.find("<!--") != string::npos)
+                gear_param_comment = true;
+            }
+
+            if(line.find("id='tooth") != string::npos)
+              N ++;
+            if(line.find("<ellipse") != string::npos){
+              if(line.find("id='reference") != string::npos){
+                r1 = stof(_g_get_svg_arg(line, "rx"));
+              }else
+              if(line.find("id='axle") != string::npos){
+                r2 = stof(_g_get_svg_arg(line, "rx"));
+              }
+            }
+
         }
         svg.close();
     }
@@ -244,6 +272,7 @@ int g_set_reference_radius(Gear* gear, double radius){
 
 int g_set_axle_radius(Gear* gear, double radius){
     Gear old_gear = *gear;
+
 
     gear->axle_radius = radius;
 
@@ -345,8 +374,11 @@ double g_get_beta(Gear* gear){
     return (180.0/N - alpha);
 }
 
-string _g_get_ellipse(double cx, double cy, double rx, double ry, string style){
+string _g_get_ellipse(double cx, double cy, double rx, double ry, string style, string id){
     string ellipse = "<ellipse ";
+
+    if(id != "")
+      ellipse += "id='"+id+"' ";
 
     ellipse += "cx='" + to_string(cx) + "' ";
     ellipse += "cy='" + to_string(cy) + "' ";
@@ -465,34 +497,34 @@ string g_generate_tooth_involute(Gear* gear, double chunks, bool left_face){
     double x1, x2, y1, y2;
 
     if(left_face){
-       t0 = 0;
-       x1 = r * (cos(t0) + t0*sin(t0));
-       y1 = r * (sin(t0) - t0*cos(t0));
-   
-       
-       path += "M " + to_string(x1) + " " + to_string(y1) + " " ;
+        t0 = 0;
+        x1 = r * (cos(t0) + t0*sin(t0));
+        y1 = r * (sin(t0) - t0*cos(t0));
 
-       path += "A " + to_string(g_get_beta(gear)) + " " + to_string(g_get_beta(gear)) + " ";
-       path += "0 0 0 ";
-       _g_rotate_point(&x1, &y1, g_get_beta(gear) * G_PI/180.0);
-       path += to_string(x1) + " " + to_string(y1);
+
+        path += "M " + to_string(x1) + " " + to_string(y1) + " " ;
+
+        path += "A " + to_string(g_get_beta(gear)) + " " + to_string(g_get_beta(gear)) + " ";
+        path += "0 0 0 ";
+        _g_rotate_point(&x1, &y1, g_get_beta(gear) * G_PI/180.0);
+        path += to_string(x1) + " " + to_string(y1);
 
     }
     else{
-       // Computing connection arc between two teeth
-       x2 = r * (cos(-t1) - t1*sin(-t1));
-       y2 = r * (sin(-t1) + t1*cos(-t1));
-       x1 = r * (cos(t1) + t1*sin(t1));
-       y1 = r * (sin(t1) - t1*cos(t1));
-       
-       alpha = 2 * G_PI/N - g_get_beta(gear) * G_PI/180.0;
-       
-       _g_rotate_point(&x2, &y2, alpha);
-       
-       path += "M " + to_string(x1) + " " + to_string(y1) + " " ;
-       path += "A " + to_string(rp + a) + " " + to_string(rp + a) + " ";
-       path += "0 0 1 ";
-       path += to_string(x2) + " " + to_string(y2);
+        // Computing connection arc between two teeth
+        x2 = r * (cos(-t1) - t1*sin(-t1));
+        y2 = r * (sin(-t1) + t1*cos(-t1));
+        x1 = r * (cos(t1) + t1*sin(t1));
+        y1 = r * (sin(t1) - t1*cos(t1));
+
+        alpha = 2 * G_PI/N - g_get_beta(gear) * G_PI/180.0;
+
+        _g_rotate_point(&x2, &y2, alpha);
+
+        path += "M " + to_string(x1) + " " + to_string(y1) + " " ;
+        path += "A " + to_string(rp + a) + " " + to_string(rp + a) + " ";
+        path += "0 0 1 ";
+        path += to_string(x2) + " " + to_string(y2);
     }
 
     return path;

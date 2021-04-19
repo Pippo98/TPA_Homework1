@@ -78,6 +78,8 @@ int g_export_svg(Gear* gear, string filename);
 */
 Gear* g_from_svg(string filename);
 
+string _g_get_svg_arg(string line, string arg);
+
 
 /**
 * Sets external gear flag
@@ -240,7 +242,7 @@ double g_get_beta(Gear* gear);
 * @param style of the ellipse component
 * return string ellipse
 */
-string _g_get_ellipse(double cx, double cy, double rx, double ry, string style);
+string _g_get_ellipse(double cx, double cy, double rx, double ry, string style, string id="");
 
 
 /**
