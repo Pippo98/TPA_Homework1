@@ -2,24 +2,24 @@
 #define GEAR_H
 
 #include <math.h>
+#include <string.h>
+
 #include <fstream>
 #include <iostream>
-#include <string.h>
 
 #define G_PI 3.14159265359
 
 using namespace std;
 
-struct Gear{
+struct Gear {
+  bool external_gear = true;
 
-    bool external_gear = true;
-    
-    double reference_radius = 0.0;
-    double axle_radius = 0.0;
+  double reference_radius = 0.0;
+  double axle_radius = 0.0;
 
-    int teeth = 0;
+  int teeth = 0;
 
-    double pressure_angle = 0.0;
+  double pressure_angle = 0.0;
 };
 
 /**
@@ -32,8 +32,7 @@ struct Gear{
 * return initialized Gear
 */
 
-Gear* g_init(bool external_gear, double reference_radius, double axle_radius, int teeth, double pressure_angle=20);
-
+Gear* g_init(bool external_gear, double reference_radius, double axle_radius, int teeth, double pressure_angle = 20);
 
 /**
 * Converts Gear string to readable string
@@ -50,7 +49,6 @@ string g_to_string(Gear* gear);
 * return errcode
 */
 int g_check_integrity(Gear* gear);
-
 
 /**
 * Returns a string in svg format
@@ -69,7 +67,6 @@ string g_to_svg(Gear* gear);
 */
 int g_export_svg(Gear* gear, string filename);
 
-
 /**
 * Gets a svg file, parse it, and returns an instance of the gear or NULL
 *
@@ -79,7 +76,6 @@ int g_export_svg(Gear* gear, string filename);
 Gear* g_from_svg(string filename);
 
 string _g_get_svg_arg(string line, string arg);
-
 
 /**
 * Sets external gear flag
@@ -93,7 +89,6 @@ string _g_get_svg_arg(string line, string arg);
 */
 int g_set_external_gear(Gear* gear, bool external, double axle_radius);
 
-
 /**
 * Sets reference radius of given gear
 *
@@ -102,7 +97,6 @@ int g_set_external_gear(Gear* gear, bool external, double axle_radius);
 * return errcode
 */
 int g_set_reference_radius(Gear* gear, double radius);
-
 
 /**
 * Sets axle radius of given gear
@@ -113,7 +107,6 @@ int g_set_reference_radius(Gear* gear, double radius);
 */
 int g_set_axle_radius(Gear* gear, double radius);
 
-
 /**
 * Sets teeth of given gear
 *
@@ -122,7 +115,6 @@ int g_set_axle_radius(Gear* gear, double radius);
 * return errcode
 */
 int g_set_teeth(Gear* gear, int teeth);
-
 
 /**
 * Sets teeth number with modulo value defined by: m = d/z
@@ -142,7 +134,6 @@ int g_set_modulo(Gear* gear, double modulo);
 * return errcode
 */
 int g_set_pressure_angle(Gear* gear, double angle);
-
 
 /**
 * Returns the external gear flag
@@ -178,7 +169,6 @@ double g_get_base_radius(Gear* gear);
 * return teeth
 */
 int g_get_teeth(Gear* gear);
-
 
 /*
 * Return modulo of the gear m=d/z
@@ -242,8 +232,7 @@ double g_get_beta(Gear* gear);
 * @param style of the ellipse component
 * return string ellipse
 */
-string _g_get_ellipse(double cx, double cy, double rx, double ry, string style, string id="");
-
+string _g_get_ellipse(double cx, double cy, double rx, double ry, string style, string id = "");
 
 /**
 * Returns string of svg line
@@ -256,14 +245,12 @@ string _g_get_ellipse(double cx, double cy, double rx, double ry, string style, 
 */
 string _g_get_line(double p1x, double p1y, double p2x, double p2y, string style);
 
-
 /**
 * Returns the path of a single tooth centered in origin
 * 
 * return string of path
 */
 string _g_get_tooth_path();
-
 
 /**
 * Returns a string representing the svg component of one tooth
@@ -276,7 +263,7 @@ string _g_get_tooth_path();
 *        the tooth component by default is 100 pixels wide.
 * @param style to spply ad the path, default null
 */
-string _g_get_tooth(double traslationX, double traslationY, double rotation, double scale, string style="");
+string _g_get_tooth(double traslationX, double traslationY, double rotation, double scale, string style = "");
 
 /**
 * Converts polar coordinates to cartesian coordinates
@@ -313,7 +300,6 @@ void _g_rotate_point(double* x, double* y, double alpha);
 * return string representing svg path of one tooth face
 */
 string g_generate_tooth_involute(Gear* gear, double chunks, bool left_face);
-
 
 /**
 * Generates the path to draw the bottom path to connect two teeth
