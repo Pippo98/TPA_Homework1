@@ -144,27 +144,9 @@ int main(int argc, char *argv[]) {
     return -1;
   }
 
-  cout << g_to_string(gear) << endl;
+  cout << g_to_string(gear, true) << endl;
   g_export_svg(gear, outfile);
 
   return 0;
-  
 
-
-  gear = g_init(true, 280, 2, 52, 15);
-  g_set_modulo(gear, 8);
-  g_export_svg(gear, outfile);
-  gear = g_from_svg(infile);
-  cout << g_to_string(gear) << endl;
-
-  gear = g_init(false, 180, 200, 52, 11);
-  if (gear == NULL)
-    return -1;
-  g_export_svg(gear, outfile);
-  gear = g_from_svg(infile);
-
-  if (gear == NULL)
-    return -1;
-  cout << g_to_string(gear) << endl;
-  return 0;
 }

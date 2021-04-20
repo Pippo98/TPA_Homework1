@@ -38,9 +38,10 @@ Gear* g_init(bool external_gear, double reference_radius, double axle_radius, in
 * Converts Gear string to readable string
 * 
 * @param gear to be converted
+* @param extended returns also the calculated parameters
 * return string representation of gear
 */
-string g_to_string(Gear* gear);
+string g_to_string(Gear* gear, bool extended=false);
 
 /**
 * Checks if the current is valid, so all contrant etc..
@@ -50,7 +51,7 @@ string g_to_string(Gear* gear);
 */
 int g_check_integrity(Gear* gear);
 
-/**
+ /**
 * Returns a string in svg format
 * 
 * return svg string
@@ -75,6 +76,14 @@ int g_export_svg(Gear* gear, string filename);
 */
 Gear* g_from_svg(string filename);
 
+/**
+* Gets values inside of argument in svg line
+* <ellipse argument='value' .../>
+* 
+* @param line svg to be parsed
+* @param arg argument to search for
+* return string value
+*/
 string _g_get_svg_arg(string line, string arg);
 
 /**
@@ -223,6 +232,14 @@ double get_pitch_angle(Gear* gear);
 double g_get_beta(Gear* gear);
 
 /**
+* Get the angle between intersection between
+* pitch circle and base circle.
+* 
+* return angle
+*/
+double g_get_alpha(Gear* gear);
+
+/**
 * Returns string of svg ellipse component
 *
 * @param cx center x of the ellipse
@@ -286,10 +303,23 @@ void _g_polar_to_cartesian(double r, double alpha, double* x, double* y);
 void _g_cartesian_to_polar(double x, double y, double* r, double* alpha);
 
 /**
+* Rotate a point around (0,0) of alpha radians
 * 
-* 
+* @param x pointer to x value
+* @param y pointer to y value
+* @param alpha angle in radians
 */
 void _g_rotate_point(double* x, double* y, double alpha);
+
+/**
+* Finds the "t" of the intersection beween left involute
+* and right involute.
+* 
+* @param gear
+* return t value
+*/
+double _g_get_t_intersection(Gear* gear);
+
 /**
 * The shape of the tooth depends on the parameters of the gear.
 * Calculate a path for the given gear, then can be repeated for all the teeth.
@@ -301,12 +331,5 @@ void _g_rotate_point(double* x, double* y, double alpha);
 */
 string g_generate_tooth_involute(Gear* gear, double chunks, bool left_face);
 
-/**
-* Generates the path to draw the bottom path to connect two teeth
-* 
-* 
-* 
-*/
-string g_generate_tooth_connection_path(Gear* gear);
 
 #endif
