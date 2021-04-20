@@ -41,7 +41,7 @@ Gear* g_init(bool external_gear, double reference_radius, double axle_radius, in
 * @param extended returns also the calculated parameters
 * return string representation of gear
 */
-string g_to_string(Gear* gear, bool extended=false);
+string g_to_string(Gear* gear, bool extended = false);
 
 /**
 * Checks if the current is valid, so all contrant etc..
@@ -56,9 +56,9 @@ int g_check_integrity(Gear* gear);
 * Because parameters are double it checks if the values are
 * closer than epsilon.
 */
-bool g_are_same(Gear* g1, Gear* g2, double epsilon=0.0001);
+bool g_are_same(Gear* g1, Gear* g2, double epsilon = 0.0001);
 
- /**
+/**
 * Returns a string in svg format
 * 
 * return svg string
@@ -186,6 +186,13 @@ double g_get_base_radius(Gear* gear);
 */
 int g_get_teeth(Gear* gear);
 
+/**
+* Returns pressure angle
+*
+* return pressure angle
+*/
+double g_pressure_angle(Gear* gear);
+
 /*
 * Return modulo of the gear m=d/z
 * where d is diameter and z is teeth number
@@ -256,7 +263,7 @@ double g_get_alpha(Gear* gear);
 * @param style of the ellipse component
 * return string ellipse
 */
-string _g_get_ellipse(double cx, double cy, double rx, double ry, string style, string id = "", string extra_arg="");
+string _g_get_ellipse(double cx, double cy, double rx, double ry, string style, string id = "", string extra_arg = "");
 
 /**
 * Returns string of svg line
@@ -337,6 +344,5 @@ double _g_get_t_intersection(Gear* gear);
 * return string representing svg path of one tooth face
 */
 string g_generate_tooth_involute(Gear* gear, double chunks, bool left_face);
-
 
 #endif

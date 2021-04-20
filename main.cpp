@@ -61,16 +61,18 @@ int main(int argc, char *argv[]) {
     return 0;
   }
 
+  Gear *gear = NULL;
+
   // needed parameters to be parsed
   int parameters = 5 + 1;
-  string infile = "gear";
-  string outfile = "gear";
+  string infile = "";
+  string outfile = "";
 
   // Default values for gear
-  bool   external_gear = true;
+  bool external_gear = true;
   double r1 = 0.0;
   double r2 = 0.0;
-  int    N  = 0;
+  int N = 0;
   double pa = 20;
 
   if (cmd_option_exists(argv, argc, "-o")) {
@@ -99,54 +101,70 @@ int main(int argc, char *argv[]) {
       bool lone_param = false;
       int idx1 = 0;
       int lone_param_count = 0;
-      for (int i = 1; i < argc; i++){
+      for (int i = 1; i < argc; i++) {
         // Checking if the current argv is a parameter
         char *end;
         strtod(argv[i], &end);
-        if (argv[i] == end){ // Conversion to double failed so is a parameter
-          if(lone_param == true)
-            break;           // If this param is interrupting gear param list break!
+        if (argv[i] == end) {  // Conversion to double failed so is a parameter
+          if (lone_param == true)
+            break;  // If this param is interrupting gear param list break!
           else
-            continue;        // So jump to next iteration
+            continue;  // So jump to next iteration
         }
 
         // Save the first param index
-        if(lone_param == false){
+        if (lone_param == false) {
           idx1 = i;
           lone_param = true;
         }
 
-        lone_param_count ++;
+        lone_param_count++;
         // Finished
-        if(lone_param_count + 1 == 5)
+        if (lone_param_count + 1 == 5)
           break;
       }
-      if(lone_param_count + 1 != 5){
+      if (lone_param_count + 1 != 5) {
         cout << "\n -> Gear parameters were wrong, IGNORING them!!" << endl;
-        cout << " -> Use -h to display help.\n" << endl;
+        cout << " -> Use -h to display help.\n"
+             << endl;
       }
       external_gear = stoi(argv[idx1]) == 1 ? true : false;
       r1 = stod(argv[idx1 + 1]);
       r2 = stod(argv[idx1 + 2]);
-      N  = stoi(argv[idx1 + 3]);
+      N = stoi(argv[idx1 + 3]);
       pa = stod(argv[idx1 + 4]);
-    }
-    else{
+      gear = g_init(external_gear, r1, r2, N, pa);
+
+      if (gear == NULL) {
+        cout << "Init failed" << endl;
+        return -1;
+      }
+    } else {
       cout << "\n -> Gear parameters were wrong, not considering them!!" << endl;
-      cout << " -> Use -h to display help.\n" << endl;
+      cout << " -> Use -h to display help.\n"
+           << endl;
+      return -1;
     }
   }
 
-  Gear *gear = g_init(external_gear, r1, r2, N, pa);
-
-  if(gear == NULL){
-    cout << "Init failed" << endl;
-    return -1;
+  if (infile != "") {
+    cout << "\nImporting SVG\n"
+         << endl;
+    gear = g_from_svg(infile);
+    if (gear == NULL) {
+      cout << "Import Failed" << endl;
+    } else {
+      cout << "Import Success" << endl;
+      cout << g_to_string(gear) << endl;
+    }
   }
 
-  cout << g_to_string(gear, true) << endl;
-  g_export_svg(gear, outfile);
+    if (gear != NULL && outfile != "") {
+    cout << "\nExporting SVG"
+         << endl;
+    g_export_svg(gear, outfile);
+    cout << "DONE" << endl;
+  }
 
   return 0;
-
 }
