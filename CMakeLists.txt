@@ -14,3 +14,10 @@ target_include_directories(main PRIVATE include)
 target_sources(main PRIVATE src/Gear.cpp)
 
 target_link_libraries(main)
+
+add_executable(tests tests.cpp)
+
+target_include_directories(tests PRIVATE include)
+
+target_sources(tests PRIVATE src/Gear.cpp)
+

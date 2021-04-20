@@ -71,16 +71,32 @@ int g_check_integrity(Gear* gear) {
   double addendum = g_get_addendum(gear);
   double dedendum = g_get_dedendum(gear);
   if (gear->external_gear) {
-    if (gear->axle_radius >= gear->reference_radius - dedendum) {
+    if (gear->axle_radius > gear->reference_radius - dedendum) {
       return -1;
     }
   } else {
-    if (gear->axle_radius <= gear->reference_radius - dedendum) {
+    if (gear->axle_radius <= gear->reference_radius + addendum) {
       return -1;
     }
   }
 
   return 0;
+}
+
+bool g_are_same(Gear* g1, Gear* g2, double e){
+
+  if(fabs(g1->external_gear - g2->external_gear) > e)
+    return false;
+  if(fabs(g1->reference_radius - g2->reference_radius) > e)
+    return false;
+  if(fabs(g1->axle_radius - g2->axle_radius) > e)
+    return false;
+  if(fabs(g1->teeth - g2->teeth) > e)
+    return false;
+  if(fabs(g1->pressure_angle - g2->pressure_angle) > e)
+    return false;
+
+  return true;
 }
 
 string g_to_svg(Gear* gear) {
@@ -159,6 +175,13 @@ string g_to_svg(Gear* gear) {
                          (width / 2),
                          (height / 2) + gear->reference_radius * oversize,
                          "stroke='black' stroke-dasharray='5, 4' stroke-opacity='0.3'") + "\n";
+  }else{
+      svg += _g_get_ellipse(width / 2,
+                            height / 2,
+                            gear->reference_radius,
+                            gear->reference_radius,
+                            quote_style + ";stroke:none",
+                            "reference") + "\n";
   }
 
   // Draw axle radius
@@ -220,6 +243,11 @@ string _g_get_svg_arg(string line, string arg) {
 
 Gear* g_from_svg(string filename) {
   ifstream svg(filename + ".svg");
+  if(!svg.good()){
+    cout << "from_svg: File does not exist" << endl;
+    return NULL;
+  }
+    
   string line = "";
 
   bool external = false;

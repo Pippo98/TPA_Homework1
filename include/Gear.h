@@ -51,6 +51,13 @@ string g_to_string(Gear* gear, bool extended=false);
 */
 int g_check_integrity(Gear* gear);
 
+/**
+* Checks whether the two gears have same parameters
+* Because parameters are double it checks if the values are
+* closer than epsilon.
+*/
+bool g_are_same(Gear* g1, Gear* g2, double epsilon=0.0001);
+
  /**
 * Returns a string in svg format
 * 
