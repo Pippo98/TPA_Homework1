@@ -249,7 +249,7 @@ double g_get_alpha(Gear* gear);
 * @param style of the ellipse component
 * return string ellipse
 */
-string _g_get_ellipse(double cx, double cy, double rx, double ry, string style, string id = "");
+string _g_get_ellipse(double cx, double cy, double rx, double ry, string style, string id = "", string extra_arg="");
 
 /**
 * Returns string of svg line
@@ -260,7 +260,7 @@ string _g_get_ellipse(double cx, double cy, double rx, double ry, string style, 
 * @param p2y
 * @param style of the ellipse component 
 */
-string _g_get_line(double p1x, double p1y, double p2x, double p2y, string style);
+string _g_get_line(double p1x, double p1y, double p2x, double p2y, string extra_arg);
 
 /**
 * Returns the path of a single tooth centered in origin
