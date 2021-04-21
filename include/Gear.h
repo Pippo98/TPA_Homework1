@@ -43,11 +43,34 @@ struct Connection {
 Gear* g_init(bool external_gear, double reference_radius, double axle_radius, int teeth, double pressure_angle = 20);
 
 /**
+* Initializes a gear with the rigth parameters to have
+* a perfect Connection*.
+* 
+* @param gear will be the other in connection struct
+* @param external_gear
+* @param reference_radius
+* @param axle_radius
+*/
+Gear* g_init_for_connection(Gear* gear, bool external_gear, double reference_radius, double axle_radius);
+
+/**
 * Initilize a connection between two gears
 *
-* 
+* @param first gear
+* @param second gear
+* @param angle of the connection refered to first
 */
 Connection* g_init_connection(Gear* first, Gear* second, double angle=0);
+
+/**
+* Deallocates gear pointer
+*/
+void g_gear_delete(Gear* gear);
+
+/**
+* Deallocates all the connection chain
+*/
+void g_connection_delete(Connection** connection);
 
 /**
 * Converts Gear string to readable string
@@ -91,9 +114,21 @@ string g_to_svg(Gear* gear, bool with_measures=false, bool header=true, double r
 int g_export_svg(Gear* gear, string filename, bool with_measures=false, bool header=true);
 
 
+/**
+* Exports a svg file with a chain of connections
+* 
+* @param connection
+* @param fname filename without extension
+*/
 int g_export_connection(Connection* connection, string fname);
+
+/**
+* Gets the gear ratio beteen two gears 
+* 
+* @param g1 gear1
+* @param g2 gear2
+*/
 double g_get_gear_ratio(Gear* g1, Gear* g2);
-Gear* g_init_(Gear* gear, bool external_gear, double reference_radius, double axle_radius);
 
 /**
 * Gets a svg file, parse it, and returns an instance of the gear or NULL
@@ -170,6 +205,14 @@ int g_set_modulo(Gear* gear, double modulo);
 * return errcode
 */
 int g_set_pressure_angle(Gear* gear, double angle);
+
+
+/**
+* Appends a connection at the end of the chain
+* @param conn1 chain
+* @param conn2 element to be added to conn1
+*/
+Connection* g_set_next_connection(Connection** conn1, Connection* conn2);
 
 /**
 * Returns the external gear flag

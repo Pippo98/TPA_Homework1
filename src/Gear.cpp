@@ -15,7 +15,7 @@ Gear* g_init(bool external_gear, double reference_radius, double axle_radius, in
   return newGear;
 }
 
-Gear* g_init_(Gear* gear, bool external_gear, double reference_radius, double axle_radius) {
+Gear* g_init_for_connection(Gear* gear, bool external_gear, double reference_radius, double axle_radius) {
   Gear* newGear = new Gear();
 
   newGear->external_gear = external_gear;
@@ -35,11 +35,34 @@ Connection* g_init_connection(Gear* first, Gear* second, double angle) {
     return NULL;
 
   Connection* connection = new Connection();
-  connection->first = first;
+  connection->first  = first;
   connection->second = second;
-  connection->angle = angle;
+  connection->angle  = angle;
+  connection->next   = NULL;
 
   return connection;
+}
+
+void g_gear_delete(Gear* gear){
+  if(gear != NULL)
+    delete gear;
+}
+
+void g_connection_delete(Connection** connection){
+  Connection* conn = *connection;
+  while(conn != NULL){
+    *connection = (*connection)->next;
+    delete conn;
+    conn = *connection;
+  }
+}
+
+Connection* g_set_next_connection(Connection** conn1, Connection* conn2){
+  Connection* current = *conn1;
+  while(current->next != NULL){
+    current = current->next;
+  }
+  current->next = conn2;
 }
 
 string g_to_string(Gear* gear, bool extended) {
