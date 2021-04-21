@@ -23,6 +23,13 @@ struct Gear {
   double pressure_angle = 0.0;
 };
 
+struct Connection {
+  Gear* first = NULL;
+  Gear* second = NULL;
+  double angle = 0;
+  Connection* next = NULL;
+};
+
 /**
 * Initialize gear struct
 *
@@ -34,6 +41,13 @@ struct Gear {
 */
 
 Gear* g_init(bool external_gear, double reference_radius, double axle_radius, int teeth, double pressure_angle = 20);
+
+/**
+* Initilize a connection between two gears
+*
+* 
+*/
+Connection* g_init_connection(Gear* first, Gear* second, double angle=0);
 
 /**
 * Converts Gear string to readable string
@@ -64,7 +78,7 @@ bool g_are_same(Gear* g1, Gear* g2, double epsilon = 0.0001);
 * 
 * return svg string
 */
-string g_to_svg(Gear* gear, bool with_measures=false);
+string g_to_svg(Gear* gear, bool with_measures=false, bool header=true, double rpm = 120);
 
 /**
 * Saves gear as a svg file
@@ -74,7 +88,12 @@ string g_to_svg(Gear* gear, bool with_measures=false);
 *                 without extension
 * return errcode
 */
-int g_export_svg(Gear* gear, string filename, bool with_measures=false);
+int g_export_svg(Gear* gear, string filename, bool with_measures=false, bool header=true);
+
+
+int g_export_connection(Connection* connection, string fname);
+double g_get_gear_ratio(Gear* g1, Gear* g2);
+Gear* g_init_(Gear* gear, bool external_gear, double reference_radius, double axle_radius);
 
 /**
 * Gets a svg file, parse it, and returns an instance of the gear or NULL

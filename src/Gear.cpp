@@ -4,18 +4,42 @@ Gear* g_init(bool external_gear, double reference_radius, double axle_radius, in
   Gear* newGear = new Gear();
 
   newGear->external_gear = external_gear;
-
   newGear->reference_radius = reference_radius;
   newGear->axle_radius = axle_radius;
-
   newGear->teeth = teeth;
-
   newGear->pressure_angle = pressure_angle;
 
   if (g_check_integrity(newGear) != 0)
     return NULL;
 
   return newGear;
+}
+
+Gear* g_init_(Gear* gear, bool external_gear, double reference_radius, double axle_radius) {
+  Gear* newGear = new Gear();
+
+  newGear->external_gear = external_gear;
+  newGear->reference_radius = reference_radius;
+  newGear->axle_radius = axle_radius;
+  newGear->teeth = 2 * reference_radius / g_get_modulo(gear);
+  newGear->pressure_angle = gear->pressure_angle;
+
+  if (g_check_integrity(newGear) != 0)
+    return NULL;
+
+  return newGear;
+}
+
+Connection* g_init_connection(Gear* first, Gear* second, double angle) {
+  if (first == NULL || second == NULL)
+    return NULL;
+
+  Connection* connection = new Connection();
+  connection->first = first;
+  connection->second = second;
+  connection->angle = angle;
+
+  return connection;
 }
 
 string g_to_string(Gear* gear, bool extended) {
@@ -55,10 +79,9 @@ string g_to_string(Gear* gear, bool extended) {
 }
 
 int g_check_integrity(Gear* gear) {
-  
-  if(gear->teeth < 2)
+  if (gear->teeth < 2)
     return -1;
-  
+
   if (gear->reference_radius <= 0)
     return -1;
 
@@ -102,17 +125,25 @@ bool g_are_same(Gear* g1, Gear* g2, double e) {
   return true;
 }
 
-string g_to_svg(Gear* gear, bool with_measures) {
+string g_to_svg(Gear* gear, bool with_measures, bool header, double rpm) {
   int width = 640;
   int height = 480;
-  int a_duration = 20;
+  double a_a1 = 0;
+  double a_a2 = 360;
+  double a_duration = 1.0/(rpm/60.0);
+  if(a_duration < 0){
+    double b = a_a1;
+    a_a1 = a_a2;
+    a_a2 = b;
+    a_duration *= -1;
+  }
 
   float stroke = 1;
   float oversize = 1.2;
 
   double r_ext = (gear->reference_radius + g_get_addendum(gear)) * oversize;
-  double greater_radius = r_ext/oversize;
-  if(!gear->external_gear){
+  double greater_radius = r_ext / oversize;
+  if (!gear->external_gear) {
     greater_radius = gear->axle_radius;
   }
 
@@ -120,9 +151,11 @@ string g_to_svg(Gear* gear, bool with_measures) {
   string quote_style = "fill:none;stroke:blue;stroke-width:" + to_string(stroke / 3);
   string gear_style = "fill:none;stroke:black;stroke-width:" + to_string(stroke);
 
-  // SVG header
-  svg += "<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n";
-  svg += "<svg version='1.1' viewBox='0 0 640 480' xmlns='http://www.w3.org/2000/svg' style='background: white' >\n";
+  if (header) {
+    // SVG header
+    svg += "<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n";
+    svg += "<svg version='1.1' viewBox='0 0 640 480' xmlns='http://www.w3.org/2000/svg' style='background: white' >\n";
+  }
 
   // Header to be able to load gear parameters
   svg += "\n\n<!--\n";
@@ -133,110 +166,115 @@ string g_to_svg(Gear* gear, bool with_measures) {
   svg += "teeth:" + to_string(gear->teeth) + "\n";
   svg += "pressure_angle:" + to_string(gear->pressure_angle) + "\n";
   svg += "-->\n\n\n";
-
-  // Container for animation
-  svg += "<g>";
+  
+  if(header){
+    // Container for animation
+    svg += "<g transform='translate(" + _str(width / 2) + " " + _str(height / 2) + ")'>";
+  }else{
+    svg += "<g>";
+  }
 
   if (with_measures) {
     // Draw reference circle
-    svg += _g_get_ellipse(width / 2, height / 2,
+    svg += _g_get_ellipse(0, 0,
                           gear->reference_radius, gear->reference_radius,
-                          quote_style, "reference") + "\n";
+                          quote_style, "reference") +
+           "\n";
 
     // Dimension lines and circles
-    svg += _g_get_ellipse(width / 2, height / 2,
+    svg += _g_get_ellipse(0, 0,
                           gear->reference_radius + g_get_addendum(gear), gear->reference_radius + g_get_addendum(gear),
-                          quote_style) + "\n";
-    svg += _g_get_ellipse(width / 2, height / 2,
+                          quote_style) +
+           "\n";
+    svg += _g_get_ellipse(0, 0,
                           g_get_base_radius(gear), g_get_base_radius(gear),
-                          quote_style) + "\n";
+                          quote_style) +
+           "\n";
 
-    svg += _g_get_line((width / 2) - gear->reference_radius * oversize, (height / 2),
-                       (width / 2) + gear->reference_radius * oversize, (height / 2),
-                       "stroke='black' stroke-dasharray='5, 4' stroke-opacity='0.3'") + "\n";
-    svg += _g_get_line((width / 2), (height / 2) - gear->reference_radius * oversize,
-                       (width / 2), (height / 2) + gear->reference_radius * oversize,
-                       "stroke='black' stroke-dasharray='5, 4' stroke-opacity='0.3'") + "\n";
+    svg += _g_get_line(0 - gear->reference_radius * oversize, 0,
+                       0 + gear->reference_radius * oversize, 0,
+                       "stroke='black' stroke-dasharray='5, 4' stroke-opacity='0.3'") +
+           "\n";
+    svg += _g_get_line(0, 0 - gear->reference_radius * oversize,
+                       0, 0 + gear->reference_radius * oversize,
+                       "stroke='black' stroke-dasharray='5, 4' stroke-opacity='0.3'") +
+           "\n";
 
     // Adding measures
-    double x1 = width/2;
-    double y1 = height/2;
+    double x1 = 0;
+    double y1 = 0;
     double x2 = x1;
     double y2 = y1;
     double angle = -10;
-    
-  
-    int font_size = 2 + gear->reference_radius/20;
+
+    int font_size = 2 + gear->reference_radius / 20;
 
     x2 = x1 + gear->reference_radius;
-    svg += "<text x='"+_str(x1+(x2-x1)/2)+"' y='"+_str(y1 - 1) + "' font-size='" + _str(font_size) +"'>" + _str(gear->reference_radius,2) + "</text>\n";
-    svg += _g_get_arrow(false, x1, y1, x2, y2, "stroke='black' stroke-width='"+to_string(stroke/3)+"'");
-    
+    svg += "<text x='" + _str(x1 + (x2 - x1) / 2) + "' y='" + _str(y1 - 1) + "' font-size='" + _str(font_size) + "'>" + _str(gear->reference_radius, 2) + "</text>\n";
+    svg += _g_get_arrow(false, x1, y1, x2, y2, "stroke='black' stroke-width='" + to_string(stroke / 3) + "'");
+
     svg += "<g transform='rotate(-10 " + _str(x1) + " " + _str(y1) + ")'>";
     x2 = x1 + gear->axle_radius;
-    svg += "<text x='"+_str(x1+(x2-x1)/2)+"' y='"+_str(y1 - 1) + "' font-size='" + _str(font_size) +"'>" + _str(gear->axle_radius,2) + "</text>\n";
-    svg += _g_get_arrow(false, x1, y1, x2, y2, "stroke='black' stroke-width='"+to_string(stroke/3)+"'");
+    svg += "<text x='" + _str(x1 + (x2 - x1) / 2) + "' y='" + _str(y1 - 1) + "' font-size='" + _str(font_size) + "'>" + _str(gear->axle_radius, 2) + "</text>\n";
+    svg += _g_get_arrow(false, x1, y1, x2, y2, "stroke='black' stroke-width='" + to_string(stroke / 3) + "'");
     svg += "</g>";
 
-    
-    x1 = width/2 + r_ext;
-    y1 = height/2;
+    x1 = 0 + r_ext;
+    y1 = 0;
     x2 = r_ext;
     y2 = 0;
-    
-    _g_rotate_point(&x2, &y2, -2*G_PI/gear->teeth);
-    x2 += width/2;
-    y2 += height/2;
 
-    svg += "<path d='M "+_str(x1)+" "+_str(y1)+" ";
-    svg += "A "+_str(r_ext)+" "+_str(r_ext) + " 0 0 0 ";
-    svg += _str(x2)+" "+_str(y2);
-    svg += "' fill='none' stroke='black' stroke-width='"+_str(stroke/2)+"'/>\n";
-    svg += _g_get_line(width/2, height/2, x1, y1, "stroke='black' stroke-width='"+_str(stroke/3)+"'");
-    svg += _g_get_line(width/2, height/2, x2, y2, "stroke='black' stroke-width='"+_str(stroke/3)+"'");
+    _g_rotate_point(&x2, &y2, -2 * G_PI / gear->teeth);
+    x2 += 0;
+    y2 += 0;
+
+    svg += "<path d='M " + _str(x1) + " " + _str(y1) + " ";
+    svg += "A " + _str(r_ext) + " " + _str(r_ext) + " 0 0 0 ";
+    svg += _str(x2) + " " + _str(y2);
+    svg += "' fill='none' stroke='black' stroke-width='" + _str(stroke / 2) + "'/>\n";
+    svg += _g_get_line(width / 2, height / 2, x1, y1, "stroke='black' stroke-width='" + _str(stroke / 3) + "'");
+    svg += _g_get_line(width / 2, height / 2, x2, y2, "stroke='black' stroke-width='" + _str(stroke / 3) + "'");
 
     x2 = r_ext;
     y2 = 0;
-    
-    _g_rotate_point(&x2, &y2, -G_PI/gear->teeth);
-    x2 += width/2;
-    y2 += height/2;
-    svg += "<text x='"+_str(x2)+"' y='"+_str(y2) + "' font-size='" + _str(font_size) +"'>" + _str(g_get_beta(gear), 2) + "</text>\n";
-    
+
+    _g_rotate_point(&x2, &y2, -G_PI / gear->teeth);
+    x2 += 0;
+    y2 += 0;
+    svg += "<text x='" + _str(x2) + "' y='" + _str(y2) + "' font-size='" + _str(font_size) + "'>" + _str(g_get_beta(gear), 2) + "</text>\n";
+
     svg += "<text x='10' y='10' font-size='10'>";
-    svg += "<tspan x='0' dy='1.4em'> Gear: " + _str(gear->external_gear? "External" : "Internal") + "</tspan>";
+    svg += "<tspan x='0' dy='1.4em'> Gear: " + _str(gear->external_gear ? "External" : "Internal") + "</tspan>";
     svg += "<tspan x='0' dy='1.4em'> Reference Radius: " + _str(gear->reference_radius, 2) + "</tspan>";
     svg += "<tspan x='0' dy='1.4em'> Axle Radius: " + _str(gear->axle_radius, 2) + "</tspan>";
     svg += "<tspan x='0' dy='1.4em'> Teeth: " + _str(gear->teeth, 2) + "</tspan>";
     svg += "<tspan x='0' dy='1.4em'> Pressure Angle: " + _str(gear->pressure_angle, 2) + "</tspan>";
     svg += "</text>\n";
-    
 
   } else {
-  
-    svg += "<animateTransform attributeName='transform' attributeType='XML' "
-        "type='rotate' from='0 " + to_string(width / 2) + " " + to_string(height / 2) +
-        "' to='" +
-        to_string(360.0) + " " + to_string(width / 2) + " " + to_string(height / 2) +
-        "' dur='" + to_string(a_duration) + "s' "
+
+    svg +=
+        "<animateTransform attributeName='transform' attributeType='XML' "
+        "type='rotate' from='" + _str(a_a1) + " 0 0' to='" +
+        _str(a_a2) + " 0 0 ' " +
+        "dur='" + to_string(a_duration) +
+        "s' "
         "repeatCount='indefinite' />";
 
-    svg += _g_get_ellipse(width / 2, height / 2,
+    svg += _g_get_ellipse(0, 0,
                           gear->reference_radius, gear->reference_radius,
-                          quote_style + ";stroke:none", "reference") + "\n";
+                          quote_style + ";stroke:none", "reference") +
+           "\n";
   }
 
   // Draw axle radius
-  svg += _g_get_ellipse(width / 2, height / 2, gear->axle_radius, gear->axle_radius, gear_style, "axle") + "\n";
+  svg += _g_get_ellipse(0, 0, gear->axle_radius, gear->axle_radius, gear_style, "axle") + "\n";
 
   // Generate the tooth shape
   string invL = "<path style='" + gear_style + "' d='";
   invL += g_generate_tooth_involute(gear, 30, true) + "' />\n";
   string invR = "<path style='" + gear_style + "' d='";
   invR += g_generate_tooth_involute(gear, 30, false) + "' />\n";
-
-  svg += "<g transform='translate(" + to_string(width / 2) + " " + to_string(height / 2) + ") ";
-  svg += "' >\n";
 
   // Draw right face, then rotate of beta angle and draw left face
   // Then draw another tooth
@@ -249,16 +287,76 @@ string g_to_svg(Gear* gear, bool with_measures) {
     svg += "</g>\n";
   }
 
-  svg += "</g>";
-  svg += "</g>";
-
-  svg += "\n</svg>";
+  svg += "</g>\n";
+  if (header) {
+    svg += "\n</svg>";
+  }
   return svg;
 }
 
-int g_export_svg(Gear* gear, string filename, bool with_measures) {
+int g_export_svg(Gear* gear, string filename, bool with_measures, bool header) {
   ofstream file(filename + ".svg");
-  file << g_to_svg(gear, with_measures);
+  file << g_to_svg(gear, with_measures, header);
+  file.close();
+  return 0;
+}
+
+int g_export_connection(Connection* connection, string fname) {
+  if (connection == NULL)
+    return -1;
+
+  if (connection->first == NULL || connection->second == NULL)
+    return -1;
+
+  double width = 640;
+  double height = 480;
+
+  ofstream file(fname + ".svg");
+
+  file << "<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n";
+  file << "<svg version='1.1' viewBox='0 0 640 480' xmlns='http://www.w3.org/2000/svg' style='background: white' >\n";
+
+  file << "<g transform='translate(" << width/6 << " " << height/4 << ")' >\n";
+
+
+  double x = 0, y = 0;
+  double adjustment_angle = 0;
+  double rotation_speed = 5;
+  while (true) {
+    // Draw first gear
+    file << "<g transform='translate(" << x << " " << y << ") '>\n";
+    file << g_to_svg(connection->first, false, false, rotation_speed);
+    file << "</g>";
+    // Calculate center of second gear
+    if (connection->first->external_gear && connection->second->external_gear) {
+      x += connection->first->reference_radius + connection->second->reference_radius;
+      adjustment_angle = 180 - connection->angle;
+    } else {
+      x += connection->first->reference_radius - connection->second->reference_radius;
+      adjustment_angle = 0;
+    }
+    // Rotate the gear basing on connection angle
+    _g_rotate_point(&x, &y, G_PI / 180 * connection->angle);
+    
+
+    rotation_speed *= g_get_gear_ratio(connection->first, connection->second);
+    if(connection->first->external_gear && connection->second->external_gear)
+      rotation_speed *= -1;
+
+    file << "<g transform='translate(" << x << " " << y << ") '>\n";
+    file << "<g transform='rotate(" << adjustment_angle << " 0 0)'>\n";
+    file << g_to_svg(connection->second, false, false, rotation_speed);
+    file << "</g>\n";
+    file << "</g>\n";
+
+    if (connection->next == NULL)
+      break;
+    else
+      connection = connection->next;
+  }
+  file << "</g>\n";
+  file << "</svg>";
+
   file.close();
   return 0;
 }
@@ -472,6 +570,10 @@ double g_get_beta(Gear* gear) {
   return (180.0 / gear->teeth - g_get_alpha(gear));
 }
 
+double g_get_gear_ratio(Gear* g1, Gear* g2) {
+  return (double(g1->teeth) / g2->teeth);
+}
+
 string _g_get_ellipse(double cx, double cy, double rx, double ry, string style, string id, string extra_arg) {
   string ellipse = "<ellipse ";
 
@@ -503,24 +605,23 @@ string _g_get_line(double p1x, double p1y, double p2x, double p2y, string extra_
   return line;
 }
 
-string _g_get_arrow(bool double_arrow, double p1x, double p1y, double p2x, double p2y, string extra_arg){
-
+string _g_get_arrow(bool double_arrow, double p1x, double p1y, double p2x, double p2y, string extra_arg) {
   string arrow = "";
-  arrow += ""
-  "<defs>\n"
-    "<marker id='start' markerWidth='10' markerHeight='7'"
-    " refX='0' refY='3.5' orient='auto'>\n"
+  arrow +=
+      ""
+      "<defs>\n"
+      "<marker id='start' markerWidth='10' markerHeight='7'"
+      " refX='0' refY='3.5' orient='auto'>\n"
       "<polygon points='10 0, 10 7, 0 3.5' />\n"
-    "</marker>\n"
-    "<marker id='end' markerWidth='10' markerHeight='7'"
-    " refX='10' refY='3.5' orient='auto'>\n"
+      "</marker>\n"
+      "<marker id='end' markerWidth='10' markerHeight='7'"
+      " refX='10' refY='3.5' orient='auto'>\n"
       "<polygon points='0 0, 10 3.5, 0 7' />\n"
-    "</marker>\n"
-  "</defs>\n";
-  if(double_arrow){
+      "</marker>\n"
+      "</defs>\n";
+  if (double_arrow) {
     extra_arg += " marker-end='url(#end)' marker-start='url(#start)'";
-  }
-  else{
+  } else {
     extra_arg += " marker-end='url(#end)'";
   }
   arrow += _g_get_line(p1x, p1y, p2x, p2y, extra_arg);
@@ -729,9 +830,8 @@ string g_generate_tooth_involute(Gear* gear, double chunks, bool left_face) {
   return path;
 }
 
-
 template <typename T>
-string _str(const T value, int precision){
+string _str(const T value, int precision) {
   ostringstream out;
   out.precision(precision);
   out << fixed << value;

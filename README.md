@@ -7,18 +7,14 @@ Export, if needed, as .svg file.
 
 ## Result
 
-External Gear
+### External Gear
 ![](external.svg)
-
-
-
-Internal Gear
+### Internal Gear
 ![](internal.svg)
-
-
-
-External with measures
+### External with measures
 ![](measures.svg)
+### Gear Chain
+![](connection.svg)
 
 # BUILD
 Stay in root directory and run:
@@ -30,9 +26,9 @@ To run tests:
 ~~~
 ./bin/tests
 ~~~
-To run main:
+To run cmd_line:
 ~~~
-./bin/main <params>
+./bin/cmd_line <params>
 ~~~
 Params explained at [command line section](#command-line)
 
