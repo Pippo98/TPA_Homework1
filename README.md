@@ -10,8 +10,31 @@ Export, if needed, as .svg file.
 External Gear
 ![](external.svg)
 
+
+
 Internal Gear
 ![](internal.svg)
+
+
+
+External with measures
+![](measures.svg)
+
+# BUILD
+Stay in root directory and run:
+~~~
+./build_all.sh
+~~~
+This command will build codes and will place the executables in: ***bin*** folder.
+To run tests:
+~~~
+./bin/tests
+~~~
+To run main:
+~~~
+./bin/main <params>
+~~~
+Params explained at [command line section](#command-line)
 
 # USAGE
 Before all...
@@ -52,7 +75,7 @@ g_set_axle_radius();
 g_set_teeth();
 g_set_pressure_angle();
 ~~~
-Can be used other king of parameters to modify the gear.  
+Can be used other kind of parameters to modify the gear.  
 Others setters:
 ~~~ C++
 g_set_modulo();
@@ -116,10 +139,12 @@ g_to_string(pointer_to_gear, true);
 ## SVG
 To **export** a gear in a svg file use:
 ~~~C++
-g_export_svg(pointer_to_gear, path+filename);
+g_export_svg(pointer_to_gear, path+filename, with_measure);
 ~~~
+If with measure is set to true, the drawing will have all the measures.  
+This flag also kills all the animations.  
 This function will create a file as the one shown on top.  
-***Filename must be without extension***
+***Filename must be without extension***.  
 The function does not check if the path exists.
 
 
@@ -138,8 +163,15 @@ Each valid gear will be exported to svg, then will wait one second and then will
 **Open gear.svg in a browser** and run **test**, reload the page each second to see the gear changing on each iteration.  
 
 # Command line
-main.cpp has some code to create, load, export a gear.  
+main.cpp has some code to create, load, export a gear from command line.  
+To use it run:
 ~~~
+./main <params>
+~~~
+All the parameters can be found here.  
+~~~
+-h to display this help
+
 Gear parameters:
 <external gear> <reference radius> <axle radius>  <teeth number> <pressure angle>
 (0 or 1)        (double value)     (double value) (int value)    (double value °)
@@ -147,7 +179,7 @@ Gear parameters:
 File parameters:
 -o <path> path for svg output file
 -l <path> path for svg load file
-
+-m is to use measures when exporting svg file
 
 When using -l option the parameters passed as arguments are not used, will be used
 the parameters contained in the file loaded!

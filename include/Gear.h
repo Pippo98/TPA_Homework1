@@ -4,6 +4,7 @@
 #include <math.h>
 #include <string.h>
 
+#include <sstream>
 #include <fstream>
 #include <iostream>
 
@@ -63,7 +64,7 @@ bool g_are_same(Gear* g1, Gear* g2, double epsilon = 0.0001);
 * 
 * return svg string
 */
-string g_to_svg(Gear* gear);
+string g_to_svg(Gear* gear, bool with_measures=false);
 
 /**
 * Saves gear as a svg file
@@ -73,7 +74,7 @@ string g_to_svg(Gear* gear);
 *                 without extension
 * return errcode
 */
-int g_export_svg(Gear* gear, string filename);
+int g_export_svg(Gear* gear, string filename, bool with_measures=false);
 
 /**
 * Gets a svg file, parse it, and returns an instance of the gear or NULL
@@ -272,9 +273,20 @@ string _g_get_ellipse(double cx, double cy, double rx, double ry, string style, 
 * @param p1y
 * @param p2x
 * @param p2y
-* @param style of the ellipse component 
+* @param extra_arguments like stroke-dasharray='...'
 */
 string _g_get_line(double p1x, double p1y, double p2x, double p2y, string extra_arg);
+
+/**
+* Returns string of svg line
+* 
+* @param p1x
+* @param p1y
+* @param p2x
+* @param p2y
+* @param extra_arguments like stroke-dasharray='...'
+*/
+string _g_get_arrow(bool double_arrow, double p1x, double p1y, double p2x, double p2y, string extra_arg);
 
 /**
 * Returns the path of a single tooth centered in origin
@@ -333,6 +345,9 @@ void _g_rotate_point(double* x, double* y, double alpha);
 * return t value
 */
 double _g_get_t_intersection(Gear* gear);
+
+template <typename T>
+string _str(const T value, int precision=6);
 
 /**
 * The shape of the tooth depends on the parameters of the gear.

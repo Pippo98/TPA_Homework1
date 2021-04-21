@@ -47,6 +47,7 @@ void displayHelp(bool exception = false) {
   cout << "\nFile parameters:\n";
   cout << "\t-o <path>\tpath for svg output file\n";
   cout << "\t-l <path>\tpath for svg load file\n";
+  cout << "\t-m is to use measures when exporting svg file\n";
 
   cout << "\n\n";
   cout << "When using -l option the parameters passed as arguments are not used, will be used\n";
@@ -70,10 +71,16 @@ int main(int argc, char *argv[]) {
 
   // Default values for gear
   bool external_gear = true;
-  double r1 = 0.0;
-  double r2 = 0.0;
-  int N = 0;
-  double pa = 20;
+  double r1 = 0.0;    // reference_radius
+  double r2 = 0.0;    // axle radius
+  int N = 0;          // teeth
+  double pa = 20;     // pressure angle
+
+  bool with_measures = false;
+  if(cmd_option_exists(argv, argc, "-m")){
+    with_measures = true;
+    parameters ++;
+  }
 
   if (cmd_option_exists(argv, argc, "-o")) {
     char *save = get_cmd_option(argv, argc, "-o");
@@ -159,10 +166,10 @@ int main(int argc, char *argv[]) {
     }
   }
 
-    if (gear != NULL && outfile != "") {
+  if (gear != NULL && outfile != "") {
     cout << "\nExporting SVG"
          << endl;
-    g_export_svg(gear, outfile);
+    g_export_svg(gear, outfile, with_measures);
     cout << "DONE" << endl;
   }
 

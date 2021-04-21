@@ -43,7 +43,7 @@ int main(){
     }
 
 
-    g_export_svg(gear, "gear");
+    g_export_svg(gear, "gear", false);
     cout << "saved gear.svg ";
     cout << "next iteration in one second ..." << endl;
     usleep(1 * 1000000);
