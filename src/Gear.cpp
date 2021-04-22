@@ -34,32 +34,39 @@ Connection* g_init_connection(Gear* first, Gear* second, double angle) {
   if (first == NULL || second == NULL)
     return NULL;
 
+  double threshold = 0.001;
+  if (fabs(g_get_modulo(first) - g_get_modulo(second) > threshold))
+    return NULL;
+
+  if (fabs(first->pressure_angle - second->pressure_angle) > threshold)
+    return NULL;
+
   Connection* connection = new Connection();
-  connection->first  = first;
+  connection->first = first;
   connection->second = second;
-  connection->angle  = angle;
-  connection->next   = NULL;
+  connection->angle = angle;
+  connection->next = NULL;
 
   return connection;
 }
 
-void g_gear_delete(Gear* gear){
-  if(gear != NULL)
+void g_gear_delete(Gear* gear) {
+  if (gear != NULL)
     delete gear;
 }
 
-void g_connection_delete(Connection** connection){
+void g_connection_delete(Connection** connection) {
   Connection* conn = *connection;
-  while(conn != NULL){
+  while (conn != NULL) {
     *connection = (*connection)->next;
     delete conn;
     conn = *connection;
   }
 }
 
-Connection* g_set_next_connection(Connection** conn1, Connection* conn2){
+Connection* g_set_next_connection(Connection** conn1, Connection* conn2) {
   Connection* current = *conn1;
-  while(current->next != NULL){
+  while (current->next != NULL) {
     current = current->next;
   }
   current->next = conn2;
@@ -153,8 +160,8 @@ string g_to_svg(Gear* gear, bool with_measures, bool header, double rpm) {
   int height = 480;
   double a_a1 = 0;
   double a_a2 = 360;
-  double a_duration = 1.0/(rpm/60.0);
-  if(a_duration < 0){
+  double a_duration = 1.0 / (rpm / 60.0);
+  if (a_duration < 0) {
     double b = a_a1;
     a_a1 = a_a2;
     a_a2 = b;
@@ -189,11 +196,11 @@ string g_to_svg(Gear* gear, bool with_measures, bool header, double rpm) {
   svg += "teeth:" + to_string(gear->teeth) + "\n";
   svg += "pressure_angle:" + to_string(gear->pressure_angle) + "\n";
   svg += "-->\n\n\n";
-  
-  if(header){
+
+  if (header) {
     // Container for animation
     svg += "<g transform='translate(" + _str(width / 2) + " " + _str(height / 2) + ")'>";
-  }else{
+  } else {
     svg += "<g>";
   }
 
@@ -275,10 +282,10 @@ string g_to_svg(Gear* gear, bool with_measures, bool header, double rpm) {
     svg += "</text>\n";
 
   } else {
-
     svg +=
         "<animateTransform attributeName='transform' attributeType='XML' "
-        "type='rotate' from='" + _str(a_a1) + " 0 0' to='" +
+        "type='rotate' from='" +
+        _str(a_a1) + " 0 0' to='" +
         _str(a_a2) + " 0 0 ' " +
         "dur='" + to_string(a_duration) +
         "s' "
@@ -339,8 +346,7 @@ int g_export_connection(Connection* connection, string fname) {
   file << "<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n";
   file << "<svg version='1.1' viewBox='0 0 640 480' xmlns='http://www.w3.org/2000/svg' style='background: white' >\n";
 
-  file << "<g transform='translate(" << width/6 << " " << height/4 << ")' >\n";
-
+  file << "<g transform='translate(" << width / 6 << " " << height / 4 << ")' >\n";
 
   double x = 0, y = 0;
   double adjustment_angle = 0;
@@ -360,10 +366,9 @@ int g_export_connection(Connection* connection, string fname) {
     }
     // Rotate the gear basing on connection angle
     _g_rotate_point(&x, &y, G_PI / 180 * connection->angle);
-    
 
     rotation_speed *= g_get_gear_ratio(connection->first, connection->second);
-    if(connection->first->external_gear && connection->second->external_gear)
+    if (connection->first->external_gear && connection->second->external_gear)
       rotation_speed *= -1;
 
     file << "<g transform='translate(" << x << " " << y << ") '>\n";

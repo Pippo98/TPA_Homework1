@@ -4,9 +4,9 @@
 #include <math.h>
 #include <string.h>
 
-#include <sstream>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 #define G_PI 3.14159265359
 
@@ -60,7 +60,7 @@ Gear* g_init_for_connection(Gear* gear, bool external_gear, double reference_rad
 * @param second gear
 * @param angle of the connection refered to first
 */
-Connection* g_init_connection(Gear* first, Gear* second, double angle=0);
+Connection* g_init_connection(Gear* first, Gear* second, double angle = 0);
 
 /**
 * Deallocates gear pointer
@@ -101,7 +101,7 @@ bool g_are_same(Gear* g1, Gear* g2, double epsilon = 0.0001);
 * 
 * return svg string
 */
-string g_to_svg(Gear* gear, bool with_measures=false, bool header=true, double rpm = 120);
+string g_to_svg(Gear* gear, bool with_measures = false, bool header = true, double rpm = 5);
 
 /**
 * Saves gear as a svg file
@@ -111,8 +111,7 @@ string g_to_svg(Gear* gear, bool with_measures=false, bool header=true, double r
 *                 without extension
 * return errcode
 */
-int g_export_svg(Gear* gear, string filename, bool with_measures=false, bool header=true);
-
+int g_export_svg(Gear* gear, string filename, bool with_measures = false, bool header = true);
 
 /**
 * Exports a svg file with a chain of connections
@@ -205,7 +204,6 @@ int g_set_modulo(Gear* gear, double modulo);
 * return errcode
 */
 int g_set_pressure_angle(Gear* gear, double angle);
-
 
 /**
 * Appends a connection at the end of the chain
@@ -409,7 +407,7 @@ void _g_rotate_point(double* x, double* y, double alpha);
 double _g_get_t_intersection(Gear* gear);
 
 template <typename T>
-string _str(const T value, int precision=6);
+string _str(const T value, int precision = 6);
 
 /**
 * The shape of the tooth depends on the parameters of the gear.

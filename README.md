@@ -19,7 +19,7 @@ Export, if needed, as .svg file.
 # BUILD
 Stay in root directory and run:
 ~~~
-./compile.sh
+./build_all.sh
 ~~~
 This command will build codes and will place the executables in: ***bin*** folder.
 To run tests:
@@ -180,3 +180,28 @@ File parameters:
 When using -l option the parameters passed as arguments are not used, will be used
 the parameters contained in the file loaded!
 ~~~
+
+# Connection
+To create a connection between two gears is enough having those two gear structs and define a connection angle.  
+gear1 and gear2 are pointers to Gear struct, angle is a double (in degrees).  
+~~~C++
+g_init_connection(gear1, gear2, angle);
+~~~
+
+To have a cood connection the two gears must have the same modulo and the same pressure_angle.  
+To create a gear with the right parameters use:
+~~~C++
+g_init_for_connection(Gear* gear1, external_gear, reference_radius, axle_radius);
+~~~
+If the init function succeed then the connection will be perfect.
+
+## Chain
+A connection struct can have a next connection, so the first connection can be linked with another connection.  
+To do that use:  
+~~~C++
+g_set_next_connection( connection1, connection2);
+~~~
+This function will append connection2 to the last element of connection1.  
+connection1 is a double pointer to Connection struct. connection2 is a pointer to Connection struct.  
+
+Example can be found in **scripts/connection.cpp**
