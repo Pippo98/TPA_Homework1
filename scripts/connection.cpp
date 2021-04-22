@@ -8,21 +8,32 @@
 
 using namespace std;
 int main() {
-  Gear* g1 = g_init(true, 100, 70, 33, 20);
-  Gear* g2 = g_init_for_connection(g1, true, 70, 50);
+  Gear* g1 = g_init(true, 100, 70, 32, 15);
+  Gear* g2 = g_init_for_connection(g1, true, 50, 10);
 
   if (g1 == NULL || g2 == NULL) {
     cout << "Gear is null" << endl;
     return 0;
   }
 
-  Connection* conn = g_init_connection(g1, g2, 20);
+  Connection* conn = g_init_connection(g1, g2, 33);
 
-  Gear* g3 = g_init(true, 100, 50, 30, 20);
-  Gear* g4 = g_init_for_connection(g1, true, 20, 1);
+  Gear* g3 = g_init(true, 80, 40, 30, 10);
+  Gear* g4 = g_init_for_connection(g3, false, 200, 220);
 
-  Connection* conn2 = g_init_connection(g3, g4, 0);
-  Connection* conn3 = g_init_connection(g3, g4, 0);
+  if(g3 == NULL)
+    cout << "G3 Invalid " << endl;
+  if(g4 == NULL)
+    cout << "G4 Invalid " << endl;
+
+  Connection* conn2 = g_init_connection(g3, g4, 50);
+  Connection* conn3 = g_init_connection(g3, g4, -70);
+
+  if(conn2 == NULL)
+    cout << "Connection2 Invalid" << endl;
+  if(conn3 == NULL)
+    cout << "Connection3 Invalid" << endl;
+
   g_set_next_connection(&conn, conn2);
   //g_set_next_connection(&conn, conn3);
 

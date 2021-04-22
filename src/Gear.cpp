@@ -33,7 +33,6 @@ Gear* g_init_for_connection(Gear* gear, bool external_gear, double reference_rad
 Connection* g_init_connection(Gear* first, Gear* second, double angle) {
   if (first == NULL || second == NULL)
     return NULL;
-
   double threshold = 0.001;
   if (fabs(g_get_modulo(first) - g_get_modulo(second) > threshold))
     return NULL;
@@ -296,6 +295,11 @@ string g_to_svg(Gear* gear, bool with_measures, bool header, double rpm) {
   // Then draw another tooth
   for (int i = 0; i < gear->teeth; i++) {
     svg << "<g id='toothn" + _str(i + 1) + "' " + "transform='rotate(" + _str((360.0 / gear->teeth) * i) + " 0 0)' >\n";
+    if(i == 0){
+      svg << "<g transform='translate("<<gear->reference_radius<<" 0 )'>";
+      svg << _g_get_ellipse(0,0,2,2,"fill:red");
+      svg << "</g>\n";
+    }
     svg << invR;
     svg << "<g transform='rotate(" + _str(-g_get_beta(gear)) + " 0 0)' >\n";
     svg << invL;
@@ -339,11 +343,14 @@ int g_export_connection(Connection* connection, string fname) {
   double x1 = 0, y1 = 0;
   double x2 = 0, y2 = 0;
   double adjustment_angle = 0;
-  double rotation_speed = 0;
+  double rotation_speed = 5;
   while (true) {
+    adjustment_angle = connection->angle;
     // Draw first gear
     file << "<g transform='translate(" << x1 << " " << y1 << ") '>\n";
+    file << "<g transform='rotate(" << adjustment_angle << " 0 0)'>\n";
     file << g_to_svg(connection->first, false, false, rotation_speed);
+    file << "</g>\n";
     file << "</g>";
 
     x2 = 0;
@@ -351,11 +358,12 @@ int g_export_connection(Connection* connection, string fname) {
     // Calculate center of second gear
     if (connection->first->external_gear && connection->second->external_gear) {
       x2 += connection->first->reference_radius + connection->second->reference_radius;
-      adjustment_angle = 180 - connection->angle + 360.0/(connection->second->teeth*2);
+      adjustment_angle = 180 + connection->angle - 360.0/(connection->second->teeth*2);
     } else {
       x2 += connection->first->reference_radius - connection->second->reference_radius;
-      adjustment_angle = 0 - connection->angle;
+      adjustment_angle = 0 + connection->angle ;
     }
+    
     // Rotate the gear basing on connection angle
     _g_rotate_point(&x2, &y2, G_PI / 180 * connection->angle);
 
@@ -689,7 +697,6 @@ double _g_get_t_intersection(Gear* gear) {
 
   double a1 = G_PI / 180.0 * (90.0 / gear->teeth + g_get_alpha(gear) / 2);
 
-  double a2 = -a1 + G_PI / 180.0 * g_get_beta(gear);
   while (true) {
     x1 = r * (cos(t) + t * sin(t));
     y1 = r * (sin(t) - t * cos(t));
@@ -698,8 +705,6 @@ double _g_get_t_intersection(Gear* gear) {
 
     _g_rotate_point(&x1, &y1, -a1);
     _g_rotate_point(&x2, &y2, a1);
-
-    //_g_rotate_point(&x2, &y2, G_PI/180.0 * g_get_beta(gear));
 
     if (y2 - y1 < threshold && y1 - y2 < threshold) {
       break;
