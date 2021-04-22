@@ -8,18 +8,18 @@ Export, if needed, as .svg file.
 ## Result
 
 ### External Gear
-![](external.svg)
+![](output/external.svg)
 ### Internal Gear
-![](internal.svg)
+![](output/internal.svg)
 ### External with measures
-![](measures.svg)
+![](output/measures.svg)
 ### Gear Chain
-![](connection.svg)
+![](output/connection.svg)
 
 # BUILD
 Stay in root directory and run:
 ~~~
-./build_all.sh
+./compile.sh
 ~~~
 This command will build codes and will place the executables in: ***bin*** folder.
 To run tests:

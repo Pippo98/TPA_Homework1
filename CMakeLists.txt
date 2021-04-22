@@ -5,28 +5,23 @@ project(Gear)
 set(CMAKE_CXX_STANDARD 17)
 
 
-# EXECUTABLE SECTION
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin/)
+include_directories(
+  ${PROJECT_SOURCE_DIR}
+  ${PROJECT_SOURCE_DIR}/include
+  )
 
-add_executable(cmd_line cmd_line.cpp)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 
-target_include_directories(cmd_line PRIVATE include)
+add_library(
+  ${PROJECT_NAME} SHARED
+  src/Gear.cpp
+  )
 
-target_sources(cmd_line PRIVATE src/Gear.cpp)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
+add_executable(tests scripts/tests.cpp)
+target_link_libraries(tests ${PROJECT_NAME})
+add_executable(cmd_line scripts/cmd_line.cpp)
+target_link_libraries(cmd_line ${PROJECT_NAME})
+add_executable(connection scripts/connection.cpp)
+target_link_libraries(connection ${PROJECT_NAME})
 
-target_link_libraries(cmd_line)
-
-
-add_executable(tests tests.cpp)
-
-target_include_directories(tests PRIVATE include)
-
-target_sources(tests PRIVATE src/Gear.cpp)
-
-
-
-add_executable(connection connection.cpp)
-
-target_include_directories(connection PRIVATE include)
-
-target_sources(connection PRIVATE src/Gear.cpp)
