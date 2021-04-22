@@ -8,7 +8,7 @@
 
 using namespace std;
 int main() {
-  Gear* g1 = g_init(true, 100, 70, 30, 20);
+  Gear* g1 = g_init(true, 100, 70, 33, 20);
   Gear* g2 = g_init_for_connection(g1, true, 70, 50);
 
   if (g1 == NULL || g2 == NULL) {
@@ -16,15 +16,15 @@ int main() {
     return 0;
   }
 
-  Connection* conn = g_init_connection(g1, g2, 30);
+  Connection* conn = g_init_connection(g1, g2, 20);
 
   Gear* g3 = g_init(true, 100, 50, 30, 20);
-  Gear* g4 = g_init_for_connection(g1, true, 30, 20);
+  Gear* g4 = g_init_for_connection(g1, true, 20, 1);
 
   Connection* conn2 = g_init_connection(g3, g4, 0);
   Connection* conn3 = g_init_connection(g3, g4, 0);
   g_set_next_connection(&conn, conn2);
-  g_set_next_connection(&conn, conn3);
+  //g_set_next_connection(&conn, conn3);
 
   g_export_connection(conn, "output/connection");
 
