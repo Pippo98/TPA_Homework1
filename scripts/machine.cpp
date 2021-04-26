@@ -30,12 +30,11 @@ int main(){
   x_platform += gru->width_platform / 2;
   y_platform -= g_get_external_radius(gear);
 
-
   string gear_svg = "<g transform='translate(" + _str(x_platform) + " " + _str(y_platform) + ")'>\n";
   gear_svg += g_to_svg(gear, false, false, 5) + "\n";
   gear_svg += "</g>\n";
 
   gru_svg.insert(gru_svg.find("</svg>"), gear_svg + "\n");
-  eb_save_to_file(gru_svg, "machine");
+  g_export_svg(gru_svg, "output/machine_gear");
   
 } 

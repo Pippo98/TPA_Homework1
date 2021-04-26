@@ -104,14 +104,14 @@ bool g_are_same(Gear* g1, Gear* g2, double epsilon = 0.0001);
 string g_to_svg(Gear* gear, bool with_measures = false, bool header = true, double rpm = 5);
 
 /**
-* Saves gear as a svg file
+* Saves string in a svg file
 * 
-* @param gear gear to be saved
+* @param svg string containing svg code
 * @param filename file name that will be used,
 *                 without extension
 * return errcode
 */
-int g_export_svg(Gear* gear, string filename, bool with_measures = false, bool header = true);
+int g_export_svg(string svg, string filename);
 
 /**
 * Exports a svg file with a chain of connections
@@ -119,7 +119,7 @@ int g_export_svg(Gear* gear, string filename, bool with_measures = false, bool h
 * @param connection
 * @param fname filename without extension
 */
-int g_export_connection(Connection* connection, string fname);
+string g_connection_to_svg(Connection* connection, bool header = true, double rpm = 5);
 
 /**
 * Gets the gear ratio beteen two gears 

@@ -8,6 +8,7 @@
 
 using namespace std;
 int main() {
+  string svg = "";
   Gear* g1 = g_init(true, 100, 70, 32, 15);
   Gear* g2 = g_init_for_connection(g1, true, 50, 10);
 
@@ -36,8 +37,8 @@ int main() {
 
   g_set_next_connection(&conn, conn2);
   //g_set_next_connection(&conn, conn3);
-
-  g_export_connection(conn, "output/connection");
+  svg = g_connection_to_svg(conn);
+  g_export_svg(svg, "output/connection");
 
   g_connection_delete(&conn);
 }

@@ -295,11 +295,6 @@ string g_to_svg(Gear* gear, bool with_measures, bool header, double rpm) {
   // Then draw another tooth
   for (int i = 0; i < gear->teeth; i++) {
     svg << "<g id='toothn" + _str(i + 1) + "' " + "transform='rotate(" + _str((360.0 / gear->teeth) * i) + " 0 0)' >\n";
-    if(i == 0){
-      svg << "<g transform='translate("<<gear->reference_radius<<" 0 )'>";
-      svg << _g_get_ellipse(0,0,2,2,"fill:red");
-      svg << "</g>\n";
-    }
     svg << invR;
     svg << "<g transform='rotate(" + _str(-g_get_beta(gear)) + " 0 0)' >\n";
     svg << invL;
@@ -316,29 +311,31 @@ string g_to_svg(Gear* gear, bool with_measures, bool header, double rpm) {
   return svg.str();
 }
 
-int g_export_svg(Gear* gear, string filename, bool with_measures, bool header) {
+int g_export_svg(string svg, string filename) {
   ofstream file(filename + ".svg");
-  file << g_to_svg(gear, with_measures, header);
+  file << svg;
   file.close();
   return 0;
 }
 
-int g_export_connection(Connection* connection, string fname) {
+string g_connection_to_svg(Connection* connection, bool header, double rpm) {
   if (connection == NULL)
-    return -1;
+    return "";
 
   if (connection->first == NULL || connection->second == NULL)
-    return -1;
+    return "";
 
   double width = 640;
   double height = 480;
 
-  ofstream file(fname + ".svg");
+  ostringstream svg("");
 
-  file << "<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n";
-  file << "<svg version='1.1' viewBox='0 0 640 480' xmlns='http://www.w3.org/2000/svg' style='background: white' >\n";
+  if(header){
+    svg << "<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n";
+    svg << "<svg version='1.1' viewBox='0 0 640 480' xmlns='http://www.w3.org/2000/svg' style='background: white' >\n";
 
-  file << "<g transform='translate(" << width / 6 << " " << height / 4 << ")' >\n";
+    svg << "<g transform='translate(" << width / 6 << " " << height / 4 << ")' >\n";
+  }
 
   double x1 = 0, y1 = 0;
   double x2 = 0, y2 = 0;
@@ -347,11 +344,11 @@ int g_export_connection(Connection* connection, string fname) {
   while (true) {
     adjustment_angle = connection->angle;
     // Draw first gear
-    file << "<g transform='translate(" << x1 << " " << y1 << ") '>\n";
-    file << "<g transform='rotate(" << adjustment_angle << " 0 0)'>\n";
-    file << g_to_svg(connection->first, false, false, rotation_speed);
-    file << "</g>\n";
-    file << "</g>";
+    svg  << "<g transform='translate(" << x1 << " " << y1 << ") '>\n";
+    svg << "<g transform='rotate(" << adjustment_angle << " 0 0)'>\n";
+    svg << g_to_svg(connection->first, false, false, rotation_speed);
+    svg << "</g>\n";
+    svg << "</g>";
 
     x2 = 0;
     y2 = 0;
@@ -374,11 +371,11 @@ int g_export_connection(Connection* connection, string fname) {
     if (connection->first->external_gear && connection->second->external_gear)
       rotation_speed *= -1;
 
-    file << "<g transform='translate(" << x2 << " " << y2 << ") '>\n";
-    file << "<g transform='rotate(" << adjustment_angle << " 0 0)'>\n";
-    file << g_to_svg(connection->second, false, false, rotation_speed);
-    file << "</g>\n";
-    file << "</g>\n";
+    svg << "<g transform='translate(" << x2 << " " << y2 << ") '>\n";
+    svg << "<g transform='rotate(" << adjustment_angle << " 0 0)'>\n";
+    svg << g_to_svg(connection->second, false, false, rotation_speed);
+    svg << "</g>\n";
+    svg << "</g>\n";
 
     x1 = x2;
     y1 = y2;
@@ -388,11 +385,10 @@ int g_export_connection(Connection* connection, string fname) {
     else
       connection = connection->next;
   }
-  file << "</g>\n";
-  file << "</svg>";
+  svg << "</g>\n";
+  svg << "</svg>";
 
-  file.close();
-  return 0;
+  return svg.str();
 }
 
 string _g_get_svg_arg(string line, string arg) {

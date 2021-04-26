@@ -169,7 +169,7 @@ int main(int argc, char *argv[]) {
   if (gear != NULL && outfile != "") {
     cout << "\nExporting SVG"
          << endl;
-    g_export_svg(gear, outfile, with_measures);
+    g_export_svg(g_to_svg(gear, with_measures), outfile);
     cout << "DONE" << endl;
   }
 
