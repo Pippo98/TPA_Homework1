@@ -221,6 +221,14 @@ Connection* g_set_next_connection(Connection** conn1, Connection* conn2);
 */
 double g_get_external_radius(Gear* gear);
 
+/**
+* Calculates the sizes of a fill chain
+* 
+* 
+*/
+void g_get_connection_sizes(Connection* connection, double *width, double *height);
+
+
 
 /**
 * Returns the external gear flag

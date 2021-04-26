@@ -385,8 +385,10 @@ string g_connection_to_svg(Connection* connection, bool header, double rpm) {
     else
       connection = connection->next;
   }
-  svg << "</g>\n";
-  svg << "</svg>";
+  if(header){
+    svg << "</g>\n";
+    svg << "</svg>";
+  }
 
   return svg.str();
 }
@@ -547,6 +549,33 @@ double g_get_external_radius(Gear* gear){
   else{
     return gear->axle_radius;
   }
+}
+
+void g_get_connection_sizes(Connection* conn, double* _width, double* _height){
+  Connection* current = conn;
+  double width = 0;
+  double height = 0;
+  Gear* g1;
+  Gear* g2;
+  while(current != NULL){
+    if(current->first > current->second){
+      g1 = current->first;
+      g2 = current->second;
+    }
+    else{
+      g1 = current->second;
+      g2 = current->first;
+    }
+    width += (2*g_get_reference_radius(g1));
+    width += (2*g_get_reference_radius(g2)) * cos(current->angle * G_PI/180.0);
+
+    height += (2*g_get_reference_radius(g1));
+    height += (2*g_get_reference_radius(g2)) * sin(current->angle * G_PI/180.0);
+
+    current = current->next;
+  }
+  *_width = width;
+  *_height = height;
 }
 
 bool g_get_external_gear(Gear* gear) {
