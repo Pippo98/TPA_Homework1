@@ -3,7 +3,11 @@
 #include <stdlib.h>
 
 #include "Gear.h"
-#include "EB_Device.h"
+#include "Machine.h"
+
+// External
+#include "Car.h"        //@eliabonte
+#include "EB_Device.h"  //GiacomoCorradini
 
 int main(){
   // Creating two basics devices
@@ -61,7 +65,7 @@ int main(){
   g_get_connection_sizes(conn1, &w, &h);
 
   x_platform += gru->width_platform / 2;
-  y_platform -= h;
+  y_platform -= 0;
   
   // Traslating chain to platform position
   string chain = "<g transform='translate(" + _str(x_platform) + " " + _str(y_platform) + ")'>\n";
@@ -73,5 +77,10 @@ int main(){
   gru_chain.insert(gru_chain.find("</svg>"), chain);
   g_export_svg(gru_chain, "output/machine_chain");
 
-  cout << w << " " << h << endl;
-} 
+
+
+  //---- CAR ----//
+  PhilMachine* machine = phil_init_defailt_machine();
+  string machine_svg = phil_machine_to_svg(machine);
+  g_export_svg(machine_svg, "output/machine_car");
+}

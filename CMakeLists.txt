@@ -16,6 +16,8 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 add_library(
   ${PROJECT_NAME} SHARED
   src/Gear.cpp
+  src/Machine.cpp
+  external_libs/Car.cpp
   external_libs/EB_Device.cpp
   )
 
