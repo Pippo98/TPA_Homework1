@@ -544,6 +544,15 @@ int g_set_pressure_angle(Gear* gear, double angle) {
   return 0;
 }
 
+double g_get_external_radius(Gear* gear){
+  if(gear->external_gear){
+    return gear->reference_radius + g_get_addendum(gear);
+  }
+  else{
+    return gear->axle_radius;
+  }
+}
+
 bool g_get_external_gear(Gear* gear) {
   return gear->external_gear;
 }

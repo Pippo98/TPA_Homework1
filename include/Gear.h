@@ -212,6 +212,16 @@ int g_set_pressure_angle(Gear* gear, double angle);
 */
 Connection* g_set_next_connection(Connection** conn1, Connection* conn2);
 
+
+/**
+* Gets the most external radius
+* axle radius if external_gear=false
+* reference_radius + addendum if external_gear=true
+* 
+*/
+double g_get_external_radius(Gear* gear);
+
+
 /**
 * Returns the external gear flag
 * 
