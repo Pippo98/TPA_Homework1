@@ -228,8 +228,6 @@ double g_get_external_radius(Gear* gear);
 */
 void g_get_connection_sizes(Connection* connection, double *width, double *height);
 
-
-
 /**
 * Returns the external gear flag
 * 

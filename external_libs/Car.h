@@ -10,6 +10,8 @@
 #define SFONDOX 800
 #define SFONDOY 600
 
+using namespace std;
+
 // parametri da passare alla funzione per inizializzarla
 struct parametri
 {

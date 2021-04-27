@@ -22,8 +22,8 @@ add_library(
   )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
-add_executable(tests scripts/tests.cpp)
-target_link_libraries(tests ${PROJECT_NAME})
+# add_executable(tests scripts/tests.cpp)
+# target_link_libraries(tests ${PROJECT_NAME})
 
 add_executable(cmd_line scripts/cmd_line.cpp)
 target_link_libraries(cmd_line ${PROJECT_NAME})
@@ -33,3 +33,5 @@ target_link_libraries(connection ${PROJECT_NAME})
 
 add_executable(machine scripts/machine.cpp)
 target_link_libraries(machine ${PROJECT_NAME})
+
+add_subdirectory(tests)

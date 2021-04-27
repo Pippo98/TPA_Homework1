@@ -50,8 +50,7 @@ Connection* g_init_connection(Gear* first, Gear* second, double angle) {
 }
 
 void g_gear_delete(Gear* gear) {
-  if (gear != NULL)
-    delete gear;
+  delete gear;
 }
 
 void g_connection_delete(Connection** connection) {
