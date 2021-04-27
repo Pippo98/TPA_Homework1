@@ -10,6 +10,8 @@ using namespace std;
 int main() {
   srand(time(NULL));
 
+  string svg = "";
+
   bool external = false;
   double r1 = 0.0;
   double r2 = 0.0;
@@ -40,8 +42,8 @@ int main() {
       cout << "OK\t";
       success++;
     }
-
-    g_export_svg(gear, "output/gear", false);
+    svg = g_to_svg(gear, false);
+    g_export_svg(svg, "output/gear");
     cout << "saved gear.svg ";
     cout << "next iteration in one second ..." << endl;
     usleep(1 * 1000000);
@@ -59,7 +61,7 @@ int main() {
   Gear* g1 = g_init(true, 100.0 / 3, 22, 50, 20);
   cout << "Saving this gear: " << endl;
   cout << g_to_string(g1) << endl;
-  g_export_svg(g1, "output/g1");
+  g_export_svg(g_to_svg(g1), "output/g1");
   cout << "Saved!" << endl;
 
   cout << "Loading Gear" << endl;
