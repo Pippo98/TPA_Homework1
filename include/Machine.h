@@ -17,13 +17,42 @@ struct PhilMachine{
   coca_device* car;
 };
 
-PhilMachine* phil_init_machine(double gru_height, double raising_speed, double car_width);
+/**
+* Create a machine with these simple parameters
+* 
+* @param gru_height specify the height in px of the gru device
+* @param raising_speed defines the gear type and dimensions
+* @param car_width width of the car
+* @param angle angle of the gru arm
+* return machine or NULL if it failed
+*/
+PhilMachine* phil_init_machine(double gru_height, double raising_speed, double car_width, double angle);
 
+/**
+* Create a default machine
+* return machine instance
+*/
 PhilMachine* phil_init_default_machine();
 
-string phil_machine_to_svg(PhilMachine* );
+/**
+* Generates a svg string representation of the machine.
+* 
+* @param machine to be converted
+*/
+string phil_machine_to_svg(PhilMachine* machine);
+/**
+* Converts an array of machines in one single svg string 
+* 
+* @param cplx complex machine array
+* @param size size of the array
+*/
 string phil_complex_machine_to_svg(PhilMachine** cplx, size_t size);
 
+/**
+ * Computes the width of the machine
+ * @param machine
+ * return double width
+*/
 double phil_get_machine_width(PhilMachine* machine);
 
 #endif

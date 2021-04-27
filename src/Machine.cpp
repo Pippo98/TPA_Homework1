@@ -1,18 +1,21 @@
 #include "Machine.h"
 
-PhilMachine* phil_init_machine(double gru_height, double raising_speed, double car_width){
-  //EbDevice* gru = eb_init(300, 400, 50, 20, 0);
-  EbDevice* gru = eb_init(gru_height*5/7, gru_height, gru_height/10, -20, 10);
+PhilMachine* phil_init_machine(double gru_height, double raising_speed, double car_width, double angle){
+  if(angle > 80)
+    angle = 80;
+  if(angle < -80)
+    angle = -80;
+  EbDevice* gru = eb_init(gru_height*5/7, gru_height, gru_height/10, angle, 20);
   if(gru == NULL){
     cout << "Gru failed" << endl;
     return NULL;
   } 
 
   Gear* gear;
-  if(gru_height/10 > (raising_speed + 5))
-    gear = g_init(true, (raising_speed + 5), gru_height/20, gru_height/20, 20);
+  if(gru_height > (raising_speed))
+    gear = g_init(true, (raising_speed + 5), gru_height/10, gru_height/10, 20);
   else
-    gear = g_init(false, gru_height/20, (raising_speed + 5), gru_height/20, 20);
+    gear = g_init(false, gru_height/10, (raising_speed + 5), gru_height/10, 20);
 
   if(gear == NULL){
     cout << "Gear failed" << endl;
@@ -38,7 +41,7 @@ PhilMachine* phil_init_machine(double gru_height, double raising_speed, double c
 
 PhilMachine* phil_init_default_machine(){
 
-  EbDevice* gru = eb_init(300, 400, 50, 20, 0);
+  EbDevice* gru = eb_init(300, 400, 50, 20, 50);
 
   //Gear* gear = g_init(false, 50, 70, 50, 20);
   Gear* gear = g_init(true, 70, 50, 50, 20);
@@ -82,6 +85,10 @@ string phil_machine_to_svg(PhilMachine* machine){
   string gear_svg = "<g transform='translate(" + _str(x_platform) + " " + _str(y_platform) + ")'>\n";
   gear_svg += g_to_svg(machine->gear, false, false, -gear_speed) + "\n";
   gear_svg += "</g>\n";
+
+  gear_svg += _g_get_ellipse(x_platform, y_platform,
+        g_get_external_radius(machine->gear), g_get_external_radius(machine->gear),
+        "stroke:brown;stroke-width:2;fill:transparent");
   
   // Adding gear string before </svg> tag
   gru_svg.insert(gru_svg.find("</svg>"), gear_svg + "\n");

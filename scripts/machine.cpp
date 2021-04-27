@@ -18,10 +18,10 @@ int main(){
 
   size_t size = 4;
   PhilMachine** complex_m = new PhilMachine* [size];
-  complex_m[0] = phil_init_machine(400, 50, 350);
-  complex_m[1] = phil_init_machine(400, 50, 350);
-  complex_m[2] = phil_init_machine(400, 60, 350);
-  complex_m[3] = phil_init_machine(400, 60, 350);
+  complex_m[0] = phil_init_machine(400, 50, 350, -10);
+  complex_m[1] = phil_init_machine(400, 50, 350, -20);
+  complex_m[2] = phil_init_machine(400, 60, 350, -30);
+  complex_m[3] = phil_init_machine(400, 60, 350, -40);
 
   string complex_machine = phil_complex_machine_to_svg(complex_m, size);
 

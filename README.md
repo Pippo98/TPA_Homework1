@@ -1,32 +1,35 @@
 # TPA_Homework1
 Homework of the advanced programming technique course!
 
-## Gear
-Create a gear from minimum given parameters.  
-Export, if needed, as .svg file.
+Create a device, make it work!  
+Create a machine using collegue device.  
 
-## Machine
+# 
+# Links
+- [Usage](#usage)
+- [Command line executable](#command-line)
+- [Tests](#tests)
+- [Connection](#connection)
+- [Machine](#machine)
+
+## Machines
 Created machine using [Elia Bontempelli](https://github.com/eliabonte/Assignment1) and [Giacomo Corradini](https://github.com/GiacomoCorradini/TpaHomework1) devices.
 
 ![](output/machine.svg)
-## Complex Machine
+## Complex Machines
 ![](output/complex_machine.svg)
 
-## Result
-
-### External Gear
+## External Gear
 ![](output/external.svg)
-### Internal Gear
-![](output/internal.svg)
-### External with measures
+## External with measures
 ![](output/measures.svg)
-### Gear Chain
+## Gear Chain
 ![](output/connection.svg)
 
 # BUILD
 Stay in root directory and run:
 ~~~
-./build_all.sh
+./compile.sh
 ~~~
 This command will build codes and will place the executables in: ***bin*** folder.
 To run tests:
@@ -165,6 +168,11 @@ The test.cpp will iterate generating some random gears, some will be valid, some
 Each valid gear will be exported to svg, then will wait one second and then will start a new iteration.  
 **Open gear.svg in a browser** and run **test**, reload the page each second to see the gear changing on each iteration.  
 
+To run **REAL** cheks run
+~~~bash
+./bin/GearTest
+~~~
+
 # Command line
 main.cpp has some code to create, load, export a gear from command line.  
 To use it run:
@@ -212,3 +220,40 @@ This function will append connection2 to the last element of connection1.
 connection1 is a double pointer to Connection struct. connection2 is a pointer to Connection struct.  
 
 Example can be found in **scripts/connection.cpp**
+
+# Machine
+To create a machine import **Machine.h**
+then use this simple code:
+~~~C++
+// Ready to use machine
+PhilMachine* machine = phil_init_default_machine();
+// Create svg string
+string machine_svg = phil_machine_to_svg(machine);
+// Export in svg file
+g_export_svg(machine_svg, "output/machine");
+~~~
+  
+~~~C++
+// Create your own
+PhilMachine* machine = phil_init_machine(400, 50, 350, 10)
+// Parameters:
+//  Gru height
+//  Elevation speed
+//  Car width
+//  Arm angle
+~~~
+
+Can be also declared an array of machines... a **complex machine**:
+~~~C++
+size_t size = 2;
+// Create dynamically an array
+PhilMachine** complex_m = new PhilMachine* [size];
+// Fill it
+complex_m[0] = phil_init_machine(400, 50, 350, 10);
+complex_m[1] = phil_init_machine(400, 80, 350, 10);
+// Specify the array size
+string complex_machine = phil_complex_machine_to_svg(complex_m, size);
+g_export_svg(complex_machine, "output/complex_machine");
+~~~
+
+Better explanations of the parameters can be found in **include/Machine.h**.  
