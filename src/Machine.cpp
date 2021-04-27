@@ -19,24 +19,8 @@ PhilMachine* phil_init_machine(double gru_height, double raising_speed, double c
     return NULL;
   }
 
-  coca_device* car = new coca_device();
-
-  car->car.width = car_width;
-  car->car.height = car_width/5;
-  car->car.cx = (SFONDOX/2) - (car->car.width/2);
-  car->car.cy = (SFONDOY/2) - (car->car.height/2);
-
-  car->sx.ruota = (car->car.height - 1) / 2;
-  car->sx.cerchione = car->sx.ruota / 1.6;
-  car->dx.ruota = (car->car.height - 1) / 2;
-  car->dx.cerchione = car->dx.ruota / 1.6;
-
-  car->sx.centrox = car->car.cx + (car->car.width / 5) + 5;
-  car->dx.centrox = car->car.cx + car->car.width - (car->car.width / 5) - 5;
-
-  coca_try_finestrini(car);
-  coca_try_spoiler(car);
-  coca_try_tetto(car);
+  parametri car_param = {float(car_width/5), float(car_width), 0, 0, 16, 2};
+  coca_device* car = coca_init_device(car_param);
 
   if(car == NULL){
     cout << "Car failed" << endl;
@@ -59,25 +43,8 @@ PhilMachine* phil_init_default_machine(){
   //Gear* gear = g_init(false, 50, 70, 50, 20);
   Gear* gear = g_init(true, 70, 50, 50, 20);
 
-  coca_device* car = new coca_device();
-
-  car->car.width = 350;
-  car->car.height = 80;
-  car->car.cx = (SFONDOX/2) - (car->car.width/2);
-  car->car.cy = (SFONDOY/2) - (car->car.height/2);
-
-  car->sx.ruota = (car->car.height - 1) / 2;
-  car->sx.cerchione = car->sx.ruota / 1.6;
-  car->dx.ruota = (car->car.height - 1) / 2;
-  car->dx.cerchione = car->dx.ruota / 1.6;
-
-  car->sx.centrox = car->car.cx + (car->car.width / 5) + 5;
-  car->dx.centrox = car->car.cx + car->car.width - (car->car.width / 5) - 5;
-
-  coca_try_finestrini(car);
-  coca_try_spoiler(car);
-  coca_try_tetto(car);
-
+  parametri car_param = {80, 350, 0, 0, 16, 2};
+  coca_device* car = coca_init_device(car_param);
 
   PhilMachine* ret = new PhilMachine();
   ret->car = car;
@@ -120,20 +87,18 @@ string phil_machine_to_svg(PhilMachine* machine){
   gru_svg.insert(gru_svg.find("</svg>"), gear_svg + "\n");
 
   //------------------------- CAR -------------------------//
-  string car = coca_strg_device(machine->car);
+  string car = coca_strg_device(machine->car, 0);
 
-  // REMOVING THE HEADER!!!
-  car.erase(0, car.find("\">")+2);
-  car.erase(car.find("</svg>"));
-
-  double car_x = -SFONDOX/2 + x_platform + g_get_external_radius(machine->gear);
+  double car_x = -machine->car->car.width/2 + x_platform + g_get_external_radius(machine->gear);
+  double y1 = height + y_platform - machine->car->cap.y3;
+  double y2 = y_platform - machine->car->cap.y3;
   
   // Animating CAR
   string animation = "<g>";
   animation += 
         "<animateTransform attributeName='transform' attributeType='XML' "
-        "type='translate' from='"+_str(car_x)+" " + _str(height + y_platform) +
-        "' to='"+_str(car_x)+" " + _str(y_platform) + "' " +
+        "type='translate' from='"+_str(car_x)+" " + _str(y1) +
+        "' to='"+_str(car_x)+" " + _str(y2) + "' " +
         "dur='" + _str(elevation_speed) +
         "s' "
         "repeatCount='indefinite' />";
@@ -150,11 +115,11 @@ string phil_machine_to_svg(PhilMachine* machine){
   // Animating the line to stay attacched to the top of the car
   line += "<g transform='translate(" + _str(x) + " " + _str(y_platform) + ")'>";
   line += "<animateTransform attributeName='transform' additive='sum' "
-          "type='scale' from='1 " + _str(scale) + "' to='1 1' " +
+          "type='scale' from='1 1' to='1 0' "
           "dur='" + _str(elevation_speed) +
           "s' "
           "repeatCount='indefinite' />";
-  line += _g_get_line(0, 0, 0, y_car-y_platform, "stroke='brown' stroke-width='2' id='def-rope'");
+  line += _g_get_line(0, 0, 0, height, "stroke='brown' stroke-width='2' id='def-rope'");
   line += "</g>";
 
   car += line;

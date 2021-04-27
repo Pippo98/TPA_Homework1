@@ -336,25 +336,23 @@ pressure_angle:20
 
 </g>
 
-<g><animateTransform attributeName='transform' attributeType='XML' type='translate' from='-229.806043 701.907786' to='-229.806043 401.907786' dur='3.279291s' repeatCount='indefinite' />
+<g><animateTransform attributeName='transform' attributeType='XML' type='translate' from='-4.806043 761.907935' to='-4.806043 461.907935' dur='3.279291s' repeatCount='indefinite' />	<rect  x="0.000000" y="0.000000" rx="10" ry="10" width="350.000000" height="80.000000" style="stroke-width:3;stroke:rgb(0,0,0)" fill="red"/>
 
-	<rect  x="225.000000" y="260.000000" rx="10" ry="10" width="350.000000" height="80.000000" style="stroke-width:3;stroke:rgb(0,0,0)" fill="red"/>
+	<circle cx="70.000000" cy="80.000000" r="39.500000" stroke="black" stroke-width="3" fill="black"/>
 
-	<circle cx="300.000000" cy="500" r="39.500000" stroke="black" stroke-width="3" fill="black"/>
+	<circle cx="70.000000" cy="80.000000" r="24.687500" stroke="black" stroke-width="3" fill="gray"/>
 
-	<circle cx="300.000000" cy="500" r="24.687500" stroke="black" stroke-width="3" fill="gray"/>
+	<circle cx="280.000000" cy="80.000000" r="39.500000" stroke="black" stroke-width="3" fill="black"/>
 
-	<circle cx="500.000000" cy="500" r="39.500000" stroke="black" stroke-width="3" fill="black"/>
+	<circle cx="280.000000" cy="80.000000" r="24.687500" stroke="black" stroke-width="3" fill="gray"/>
 
-	<circle cx="500.000000" cy="500" r="24.687500" stroke="black" stroke-width="3" fill="gray"/>
+	<polygon points="60.000343,0.000000 100.000000,-60.000149 200.000000,-60.000149 200.000000,0.000000 60.000343,0.000000" style="fill:red;stroke:black;stroke-width:5"/>
 
-	<polygon points="285.000336,260.000000 325.000000,199.999847 425.000000,199.999847 425.000000,260.000000 285.000336,260.000000" style="fill:red;stroke:black;stroke-width:5"/>
+	<polygon points="200.000000,-60.000149 280.000000,0.000000 200.000000,0.000000" style="fill:lightblue;stroke:black;stroke-width:5" />
 
-	<polygon points="425.000000,199.999847 505.000000,260.000000 425.000000,260.000000" style="fill:lightblue;stroke:black;stroke-width:5" />
+	<rect x="10.000000" y="-29.999996" width="20.000000" height="29.999996" style="stroke-width:3;stroke:rgb(0,0,0)" fill="red"/>
 
-	<rect x="235.000000" y="230.000000" width="20.000000" height="29.999996" style="stroke-width:3;stroke:rgb(0,0,0)" fill="red"/>
-
-</g><g transform='translate(170.193957 401.907786)'><animateTransform attributeName='transform' additive='sum' type='scale' from='1 2.500001' to='1 1' dur='3.279291s' repeatCount='indefinite' /><line x1='0.000000' y1='0.000000' x2='0.000000' y2='199.999847'  stroke='brown' stroke-width='2' id='def-rope' /></g></g><g transform='translate(400 0)'>
+</g><g transform='translate(170.193957 401.907786)'><animateTransform attributeName='transform' additive='sum' type='scale' from='1 1' to='1 0' dur='3.279291s' repeatCount='indefinite' /><line x1='0.000000' y1='0.000000' x2='0.000000' y2='300.000000'  stroke='brown' stroke-width='2' id='def-rope' /></g></g><g transform='translate(400 0)'>
 
 <g>
 <rect x = "10.000000" y = "100" width = "400.000000" height = "40" stroke = "black" stroke-width = "3" fill = "yellow"/>
@@ -510,25 +508,23 @@ pressure_angle:20
 
 </g>
 
-<g><animateTransform attributeName='transform' attributeType='XML' type='translate' from='-37.279959 688.483606' to='-37.279959 388.483606' dur='4.340589s' repeatCount='indefinite' />
+<g><animateTransform attributeName='transform' attributeType='XML' type='translate' from='187.720041 740.983736' to='187.720041 440.983736' dur='4.340589s' repeatCount='indefinite' />	<rect  x="0.000000" y="0.000000" rx="10" ry="10" width="350.000000" height="70.000000" style="stroke-width:3;stroke:rgb(0,0,0)" fill="red"/>
 
-	<rect  x="225.000000" y="265.000000" rx="10" ry="10" width="350.000000" height="70.000000" style="stroke-width:3;stroke:rgb(0,0,0)" fill="red"/>
+	<circle cx="70.000000" cy="70.000000" r="34.500000" stroke="black" stroke-width="3" fill="black"/>
 
-	<circle cx="300.000000" cy="500" r="34.500000" stroke="black" stroke-width="3" fill="black"/>
+	<circle cx="70.000000" cy="70.000000" r="21.562500" stroke="black" stroke-width="3" fill="gray"/>
 
-	<circle cx="300.000000" cy="500" r="21.562500" stroke="black" stroke-width="3" fill="gray"/>
+	<circle cx="280.000000" cy="70.000000" r="34.500000" stroke="black" stroke-width="3" fill="black"/>
 
-	<circle cx="500.000000" cy="500" r="34.500000" stroke="black" stroke-width="3" fill="black"/>
+	<circle cx="280.000000" cy="70.000000" r="21.562500" stroke="black" stroke-width="3" fill="gray"/>
 
-	<circle cx="500.000000" cy="500" r="21.562500" stroke="black" stroke-width="3" fill="gray"/>
+	<polygon points="60.000343,0.000000 100.000000,-52.500130 200.000000,-52.500130 200.000000,0.000000 60.000343,0.000000" style="fill:red;stroke:black;stroke-width:5"/>
 
-	<polygon points="285.000336,265.000000 325.000000,212.499863 425.000000,212.499863 425.000000,265.000000 285.000336,265.000000" style="fill:red;stroke:black;stroke-width:5"/>
+	<polygon points="200.000000,-52.500130 280.000000,0.000000 200.000000,0.000000" style="fill:lightblue;stroke:black;stroke-width:5" />
 
-	<polygon points="425.000000,212.499863 505.000000,265.000000 425.000000,265.000000" style="fill:lightblue;stroke:black;stroke-width:5" />
+	<rect x="10.000000" y="-26.249996" width="20.000000" height="26.249996" style="stroke-width:3;stroke:rgb(0,0,0)" fill="red"/>
 
-	<rect x="235.000000" y="238.750000" width="20.000000" height="26.249996" style="stroke-width:3;stroke:rgb(0,0,0)" fill="red"/>
-
-</g><g transform='translate(362.720041 388.483606)'><animateTransform attributeName='transform' additive='sum' type='scale' from='1 2.411766' to='1 1' dur='4.340589s' repeatCount='indefinite' /><line x1='0.000000' y1='0.000000' x2='0.000000' y2='212.499863'  stroke='brown' stroke-width='2' id='def-rope' /></g></g><g transform='translate(937 0)'>
+</g><g transform='translate(362.720041 388.483606)'><animateTransform attributeName='transform' additive='sum' type='scale' from='1 1' to='1 0' dur='4.340589s' repeatCount='indefinite' /><line x1='0.000000' y1='0.000000' x2='0.000000' y2='300.000000'  stroke='brown' stroke-width='2' id='def-rope' /></g></g><g transform='translate(937 0)'>
 
 <g>
 <rect x = "0.000000" y = "100" width = "400.000000" height = "40" stroke = "black" stroke-width = "3" fill = "yellow"/>
@@ -864,25 +860,23 @@ pressure_angle:20
 
 </g>
 
-<g><animateTransform attributeName='transform' attributeType='XML' type='translate' from='-229.806043 701.907786' to='-229.806043 401.907786' dur='3.279291s' repeatCount='indefinite' />
+<g><animateTransform attributeName='transform' attributeType='XML' type='translate' from='-4.806043 761.907935' to='-4.806043 461.907935' dur='3.279291s' repeatCount='indefinite' />	<rect  x="0.000000" y="0.000000" rx="10" ry="10" width="350.000000" height="80.000000" style="stroke-width:3;stroke:rgb(0,0,0)" fill="red"/>
 
-	<rect  x="225.000000" y="260.000000" rx="10" ry="10" width="350.000000" height="80.000000" style="stroke-width:3;stroke:rgb(0,0,0)" fill="red"/>
+	<circle cx="70.000000" cy="80.000000" r="39.500000" stroke="black" stroke-width="3" fill="black"/>
 
-	<circle cx="300.000000" cy="500" r="39.500000" stroke="black" stroke-width="3" fill="black"/>
+	<circle cx="70.000000" cy="80.000000" r="24.687500" stroke="black" stroke-width="3" fill="gray"/>
 
-	<circle cx="300.000000" cy="500" r="24.687500" stroke="black" stroke-width="3" fill="gray"/>
+	<circle cx="280.000000" cy="80.000000" r="39.500000" stroke="black" stroke-width="3" fill="black"/>
 
-	<circle cx="500.000000" cy="500" r="39.500000" stroke="black" stroke-width="3" fill="black"/>
+	<circle cx="280.000000" cy="80.000000" r="24.687500" stroke="black" stroke-width="3" fill="gray"/>
 
-	<circle cx="500.000000" cy="500" r="24.687500" stroke="black" stroke-width="3" fill="gray"/>
+	<polygon points="60.000343,0.000000 100.000000,-60.000149 200.000000,-60.000149 200.000000,0.000000 60.000343,0.000000" style="fill:red;stroke:black;stroke-width:5"/>
 
-	<polygon points="285.000336,260.000000 325.000000,199.999847 425.000000,199.999847 425.000000,260.000000 285.000336,260.000000" style="fill:red;stroke:black;stroke-width:5"/>
+	<polygon points="200.000000,-60.000149 280.000000,0.000000 200.000000,0.000000" style="fill:lightblue;stroke:black;stroke-width:5" />
 
-	<polygon points="425.000000,199.999847 505.000000,260.000000 425.000000,260.000000" style="fill:lightblue;stroke:black;stroke-width:5" />
+	<rect x="10.000000" y="-29.999996" width="20.000000" height="29.999996" style="stroke-width:3;stroke:rgb(0,0,0)" fill="red"/>
 
-	<rect x="235.000000" y="230.000000" width="20.000000" height="29.999996" style="stroke-width:3;stroke:rgb(0,0,0)" fill="red"/>
-
-</g><g transform='translate(170.193957 401.907786)'><animateTransform attributeName='transform' additive='sum' type='scale' from='1 2.500001' to='1 1' dur='3.279291s' repeatCount='indefinite' /><line x1='0.000000' y1='0.000000' x2='0.000000' y2='199.999847'  stroke='brown' stroke-width='2' id='def-rope' /></g></g><g transform='translate(1337 0)'>
+</g><g transform='translate(170.193957 401.907786)'><animateTransform attributeName='transform' additive='sum' type='scale' from='1 1' to='1 0' dur='3.279291s' repeatCount='indefinite' /><line x1='0.000000' y1='0.000000' x2='0.000000' y2='300.000000'  stroke='brown' stroke-width='2' id='def-rope' /></g></g><g transform='translate(1337 0)'>
 
 <g>
 <rect x = "0.000000" y = "100" width = "400.000000" height = "40" stroke = "black" stroke-width = "3" fill = "yellow"/>
@@ -1218,25 +1212,23 @@ pressure_angle:20
 
 </g>
 
-<g><animateTransform attributeName='transform' attributeType='XML' type='translate' from='-229.806043 701.907786' to='-229.806043 401.907786' dur='3.279291s' repeatCount='indefinite' />
+<g><animateTransform attributeName='transform' attributeType='XML' type='translate' from='-4.806043 761.907935' to='-4.806043 461.907935' dur='3.279291s' repeatCount='indefinite' />	<rect  x="0.000000" y="0.000000" rx="10" ry="10" width="350.000000" height="80.000000" style="stroke-width:3;stroke:rgb(0,0,0)" fill="red"/>
 
-	<rect  x="225.000000" y="260.000000" rx="10" ry="10" width="350.000000" height="80.000000" style="stroke-width:3;stroke:rgb(0,0,0)" fill="red"/>
+	<circle cx="70.000000" cy="80.000000" r="39.500000" stroke="black" stroke-width="3" fill="black"/>
 
-	<circle cx="300.000000" cy="500" r="39.500000" stroke="black" stroke-width="3" fill="black"/>
+	<circle cx="70.000000" cy="80.000000" r="24.687500" stroke="black" stroke-width="3" fill="gray"/>
 
-	<circle cx="300.000000" cy="500" r="24.687500" stroke="black" stroke-width="3" fill="gray"/>
+	<circle cx="280.000000" cy="80.000000" r="39.500000" stroke="black" stroke-width="3" fill="black"/>
 
-	<circle cx="500.000000" cy="500" r="39.500000" stroke="black" stroke-width="3" fill="black"/>
+	<circle cx="280.000000" cy="80.000000" r="24.687500" stroke="black" stroke-width="3" fill="gray"/>
 
-	<circle cx="500.000000" cy="500" r="24.687500" stroke="black" stroke-width="3" fill="gray"/>
+	<polygon points="60.000343,0.000000 100.000000,-60.000149 200.000000,-60.000149 200.000000,0.000000 60.000343,0.000000" style="fill:red;stroke:black;stroke-width:5"/>
 
-	<polygon points="285.000336,260.000000 325.000000,199.999847 425.000000,199.999847 425.000000,260.000000 285.000336,260.000000" style="fill:red;stroke:black;stroke-width:5"/>
+	<polygon points="200.000000,-60.000149 280.000000,0.000000 200.000000,0.000000" style="fill:lightblue;stroke:black;stroke-width:5" />
 
-	<polygon points="425.000000,199.999847 505.000000,260.000000 425.000000,260.000000" style="fill:lightblue;stroke:black;stroke-width:5" />
+	<rect x="10.000000" y="-29.999996" width="20.000000" height="29.999996" style="stroke-width:3;stroke:rgb(0,0,0)" fill="red"/>
 
-	<rect x="235.000000" y="230.000000" width="20.000000" height="29.999996" style="stroke-width:3;stroke:rgb(0,0,0)" fill="red"/>
-
-</g><g transform='translate(170.193957 401.907786)'><animateTransform attributeName='transform' additive='sum' type='scale' from='1 2.500001' to='1 1' dur='3.279291s' repeatCount='indefinite' /><line x1='0.000000' y1='0.000000' x2='0.000000' y2='199.999847'  stroke='brown' stroke-width='2' id='def-rope' /></g></g><g transform='translate(1737 0)'>
+</g><g transform='translate(170.193957 401.907786)'><animateTransform attributeName='transform' additive='sum' type='scale' from='1 1' to='1 0' dur='3.279291s' repeatCount='indefinite' /><line x1='0.000000' y1='0.000000' x2='0.000000' y2='300.000000'  stroke='brown' stroke-width='2' id='def-rope' /></g></g><g transform='translate(1737 0)'>
 
 <g>
 <rect x = "0.000000" y = "100" width = "400.000000" height = "40" stroke = "black" stroke-width = "3" fill = "yellow"/>
@@ -1572,22 +1564,20 @@ pressure_angle:20
 
 </g>
 
-<g><animateTransform attributeName='transform' attributeType='XML' type='translate' from='-229.806043 701.907786' to='-229.806043 401.907786' dur='3.279291s' repeatCount='indefinite' />
+<g><animateTransform attributeName='transform' attributeType='XML' type='translate' from='-4.806043 761.907935' to='-4.806043 461.907935' dur='3.279291s' repeatCount='indefinite' />	<rect  x="0.000000" y="0.000000" rx="10" ry="10" width="350.000000" height="80.000000" style="stroke-width:3;stroke:rgb(0,0,0)" fill="red"/>
 
-	<rect  x="225.000000" y="260.000000" rx="10" ry="10" width="350.000000" height="80.000000" style="stroke-width:3;stroke:rgb(0,0,0)" fill="red"/>
+	<circle cx="70.000000" cy="80.000000" r="39.500000" stroke="black" stroke-width="3" fill="black"/>
 
-	<circle cx="300.000000" cy="500" r="39.500000" stroke="black" stroke-width="3" fill="black"/>
+	<circle cx="70.000000" cy="80.000000" r="24.687500" stroke="black" stroke-width="3" fill="gray"/>
 
-	<circle cx="300.000000" cy="500" r="24.687500" stroke="black" stroke-width="3" fill="gray"/>
+	<circle cx="280.000000" cy="80.000000" r="39.500000" stroke="black" stroke-width="3" fill="black"/>
 
-	<circle cx="500.000000" cy="500" r="39.500000" stroke="black" stroke-width="3" fill="black"/>
+	<circle cx="280.000000" cy="80.000000" r="24.687500" stroke="black" stroke-width="3" fill="gray"/>
 
-	<circle cx="500.000000" cy="500" r="24.687500" stroke="black" stroke-width="3" fill="gray"/>
+	<polygon points="60.000343,0.000000 100.000000,-60.000149 200.000000,-60.000149 200.000000,0.000000 60.000343,0.000000" style="fill:red;stroke:black;stroke-width:5"/>
 
-	<polygon points="285.000336,260.000000 325.000000,199.999847 425.000000,199.999847 425.000000,260.000000 285.000336,260.000000" style="fill:red;stroke:black;stroke-width:5"/>
+	<polygon points="200.000000,-60.000149 280.000000,0.000000 200.000000,0.000000" style="fill:lightblue;stroke:black;stroke-width:5" />
 
-	<polygon points="425.000000,199.999847 505.000000,260.000000 425.000000,260.000000" style="fill:lightblue;stroke:black;stroke-width:5" />
+	<rect x="10.000000" y="-29.999996" width="20.000000" height="29.999996" style="stroke-width:3;stroke:rgb(0,0,0)" fill="red"/>
 
-	<rect x="235.000000" y="230.000000" width="20.000000" height="29.999996" style="stroke-width:3;stroke:rgb(0,0,0)" fill="red"/>
-
-</g><g transform='translate(170.193957 401.907786)'><animateTransform attributeName='transform' additive='sum' type='scale' from='1 2.500001' to='1 1' dur='3.279291s' repeatCount='indefinite' /><line x1='0.000000' y1='0.000000' x2='0.000000' y2='199.999847'  stroke='brown' stroke-width='2' id='def-rope' /></g></g></svg>
+</g><g transform='translate(170.193957 401.907786)'><animateTransform attributeName='transform' additive='sum' type='scale' from='1 1' to='1 0' dur='3.279291s' repeatCount='indefinite' /><line x1='0.000000' y1='0.000000' x2='0.000000' y2='300.000000'  stroke='brown' stroke-width='2' id='def-rope' /></g></g></svg>
