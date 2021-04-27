@@ -2,7 +2,7 @@
 
 PhilMachine* phil_init_default_machine(){
 
-  EbDevice* gru = eb_init(300, 400, 50, 20, 170);
+  EbDevice* gru = eb_init(300, 400, 50, 20, 0);
 
   //Gear* gear = g_init(false, 50, 70, 50, 20);
   Gear* gear = g_init(true, 70, 50, 50, 20);
@@ -111,4 +111,58 @@ string phil_machine_to_svg(PhilMachine* machine){
   gru_svg.insert(gru_svg.find("</svg>"), car);
 
   return gru_svg;
+}
+
+
+string phil_complex_machine_to_svg(PhilMachine** cplx, size_t size){
+  string svg = "";
+
+  int x = 0;
+  for (int i = 0; i < size; i++){
+    if(cplx[i] == NULL)
+      break;
+
+    string curr_svg = phil_machine_to_svg(cplx[i]); 
+
+    // REMOVING HEADER.
+    curr_svg.erase(0, curr_svg.find("\">")+2);
+    curr_svg.erase(curr_svg.find("</svg>"));
+
+    // X Traslation
+    curr_svg  = "<g transform='translate("+_str(x)+" 0)'>" + curr_svg;
+    curr_svg += "</g>";
+
+    svg += curr_svg;
+
+    // Adding width of current machine
+    x += phil_get_machine_width(cplx[i]);
+  }
+
+  svg = "<svg version='1.1' viewBox='0 0 "+_str(x)+ " 900' xmlns='http://www.w3.org/2000/svg' style='background: white' >\n" + svg;
+  svg = "<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n" + svg;
+
+  svg += "</svg>";
+  return svg;
+}
+
+
+double phil_get_machine_width(PhilMachine* machine){
+
+  double w1 = 0;
+  double w2 = 0;
+  double w3 = 0;
+
+  w1  = machine->gru->sliding + machine->gru->width_towtruck;
+  w2  = machine->gru->sliding + machine->gru->width_towtruck/2;
+  w2 += machine->gru->length_shaft*sin((G_PI/180.0) * machine->gru->rotation);
+  w2 += g_get_external_radius(machine->gear);
+
+  w3 = w2 + machine->car->car.width/2;
+
+  if(w1 > w2 && w1 > w3)
+    return w1;
+  if(w2 > w1 && w2 > w3)
+    return w2;
+  if(w3 > w1 && w3 > w2)
+    return w3;
 }

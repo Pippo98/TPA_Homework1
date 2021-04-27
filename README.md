@@ -6,8 +6,11 @@ Create a gear from minimum given parameters.
 Export, if needed, as .svg file.
 
 ## Machine
-Created machine using [GiacomoCorradini](https://github.com/GiacomoCorradini/TpaHomework1) device
+Created machine using [Elia Bontempelli](https://github.com/eliabonte/Assignment1) and [Giacomo Corradini](https://github.com/GiacomoCorradini/TpaHomework1) devices.
+
 ![](output/machine_car.svg)
+## Complex Machine
+![](output/complex_machine.svg)
 
 ## Result
 

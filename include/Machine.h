@@ -20,5 +20,8 @@ struct PhilMachine{
 PhilMachine* phil_init_default_machine();
 
 string phil_machine_to_svg(PhilMachine* );
+string phil_complex_machine_to_svg(PhilMachine** cplx, size_t size);
+
+double phil_get_machine_width(PhilMachine* machine);
 
 #endif
