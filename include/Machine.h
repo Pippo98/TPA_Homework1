@@ -17,6 +17,8 @@ struct PhilMachine{
   coca_device* car;
 };
 
+PhilMachine* phil_init_machine(double gru_height, double raising_speed, double car_width);
+
 PhilMachine* phil_init_default_machine();
 
 string phil_machine_to_svg(PhilMachine* );

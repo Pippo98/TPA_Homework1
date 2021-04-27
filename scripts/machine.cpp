@@ -19,7 +19,7 @@ int main(){
   size_t size = 5;
   PhilMachine** complex_m = new PhilMachine* [size];
   complex_m[0] = machine;
-  complex_m[1] = phil_init_default_machine();
+  complex_m[1] = phil_init_machine(400, 50, 350);
   complex_m[2] = phil_init_default_machine();
   complex_m[3] = phil_init_default_machine();
   complex_m[4] = phil_init_default_machine();

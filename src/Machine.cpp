@@ -1,5 +1,57 @@
 #include "Machine.h"
 
+PhilMachine* phil_init_machine(double gru_height, double raising_speed, double car_width){
+  //EbDevice* gru = eb_init(300, 400, 50, 20, 0);
+  EbDevice* gru = eb_init(gru_height*5/7, gru_height, gru_height/10, -20, 10);
+  if(gru == NULL){
+    cout << "Gru failed" << endl;
+    return NULL;
+  } 
+
+  Gear* gear;
+  if(gru_height/10 > (raising_speed + 5))
+    gear = g_init(true, (raising_speed + 5), gru_height/20, gru_height/20, 20);
+  else
+    gear = g_init(false, gru_height/20, (raising_speed + 5), gru_height/20, 20);
+
+  if(gear == NULL){
+    cout << "Gear failed" << endl;
+    return NULL;
+  }
+
+  coca_device* car = new coca_device();
+
+  car->car.width = car_width;
+  car->car.height = car_width/5;
+  car->car.cx = (SFONDOX/2) - (car->car.width/2);
+  car->car.cy = (SFONDOY/2) - (car->car.height/2);
+
+  car->sx.ruota = (car->car.height - 1) / 2;
+  car->sx.cerchione = car->sx.ruota / 1.6;
+  car->dx.ruota = (car->car.height - 1) / 2;
+  car->dx.cerchione = car->dx.ruota / 1.6;
+
+  car->sx.centrox = car->car.cx + (car->car.width / 5) + 5;
+  car->dx.centrox = car->car.cx + car->car.width - (car->car.width / 5) - 5;
+
+  coca_try_finestrini(car);
+  coca_try_spoiler(car);
+  coca_try_tetto(car);
+
+  if(car == NULL){
+    cout << "Car failed" << endl;
+    return NULL;
+  }
+
+  PhilMachine* ret = new PhilMachine();
+  ret->car = car;
+  ret->gru = gru;
+  ret->gear = gear;
+
+  return ret;
+}
+
+
 PhilMachine* phil_init_default_machine(){
 
   EbDevice* gru = eb_init(300, 400, 50, 20, 0);
@@ -120,7 +172,7 @@ string phil_complex_machine_to_svg(PhilMachine** cplx, size_t size){
   int x = 0;
   for (int i = 0; i < size; i++){
     if(cplx[i] == NULL)
-      break;
+      continue;
 
     string curr_svg = phil_machine_to_svg(cplx[i]); 
 
@@ -154,7 +206,7 @@ double phil_get_machine_width(PhilMachine* machine){
 
   w1  = machine->gru->sliding + machine->gru->width_towtruck;
   w2  = machine->gru->sliding + machine->gru->width_towtruck/2;
-  w2 += machine->gru->length_shaft*sin((G_PI/180.0) * machine->gru->rotation);
+  w2 += machine->gru->length_shaft*sin(-(G_PI/180.0) * machine->gru->rotation);
   w2 += g_get_external_radius(machine->gear);
 
   w3 = w2 + machine->car->car.width/2;
@@ -165,4 +217,5 @@ double phil_get_machine_width(PhilMachine* machine){
     return w2;
   if(w3 > w1 && w3 > w2)
     return w3;
+  return w1;
 }
