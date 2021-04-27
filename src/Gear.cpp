@@ -167,7 +167,7 @@ string g_to_svg(Gear* gear, bool with_measures, bool header, double rpm) {
     a_duration *= -1;
   }
 
-  float stroke = 1;
+  float stroke = 1.5;
   float oversize = 1.2;
 
   double r_ext = (gear->reference_radius + g_get_addendum(gear)) * oversize;

@@ -6,12 +6,12 @@
 #include "Machine.h"
 
 // External
-#include "Car.h"        //@eliabonte
-#include "EB_Device.h"  //GiacomoCorradini
+#include "Car.h"        // @eliabonte
+#include "EB_Device.h"  // @GiacomoCorradini
 
 int main(){
   // Creating two basics devices
-  EbDevice* gru = eb_init(600, 300, 350, -30, 0);
+  EbDevice* gru = eb_init(300, 400, 50, -30, 0);
 
   if(gru == NULL){
     cout << "Gru init Failed!" << endl;
@@ -38,7 +38,7 @@ int main(){
   
   // Getting center of platform and adding gear size
   x_platform += gru->width_platform / 2;
-  y_platform -= g_get_external_radius(gear);
+  y_platform += 20/2;
   
   // Translating gear to center of platform
   string gear_svg = "<g transform='translate(" + _str(x_platform) + " " + _str(y_platform) + ")'>\n";
@@ -50,7 +50,6 @@ int main(){
   g_export_svg(gru_svg, "output/machine_gear");
   
   //------ CHAIN ------//
-
   
   // Creating two gears to initialize a chain
   Gear* gear1 = g_init(true, 50, 10, 20, 20);
@@ -80,7 +79,7 @@ int main(){
 
 
   //---- CAR ----//
-  PhilMachine* machine = phil_init_defailt_machine();
+  PhilMachine* machine = phil_init_default_machine();
   string machine_svg = phil_machine_to_svg(machine);
   g_export_svg(machine_svg, "output/machine_car");
 }
